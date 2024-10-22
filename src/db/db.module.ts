@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { DbService } from './db.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
@@ -14,11 +13,10 @@ import { ConfigModule } from '@nestjs/config';
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [],
+        autoLoadEntities: true,
         synchronize: true,
       }),
     }),
   ],
-  providers: [DbService],
 })
 export class DbModule {}
