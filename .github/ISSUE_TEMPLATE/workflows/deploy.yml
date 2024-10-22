@@ -1,0 +1,28 @@
+name: dream-catcher-deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: create zip
+        run: |
+          zip -r dream-catcher-deploy.zip src .dockerignore Dockerfile package*.json tsconfig*.json
+
+      - name: upload-zip
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.ACCSESS_KEY }}
+          aws_secret_key: ${{ secrets.SECRET_ACCSESS_KEY }}
+          region: ap-northeast-2
+          application_name: dream-catcher
+          version_label: v1.0.${{ github.run_number }}
+          environment_name: Dream-catcher-env
+          deployment_package: dream-catcher-deploy.zip
