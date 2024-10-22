@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Diary } from 'src/diary/entities/diary.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -19,4 +26,7 @@ export class User {
 
   @Column()
   uid: string;
+
+  @OneToMany(() => Diary, (diary) => diary)
+  diarys: Diary[];
 }
