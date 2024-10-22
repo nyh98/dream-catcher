@@ -19,7 +19,7 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
   },
 };
 
-export const SWAGGER_ERROR_RESPONSE_EXAMPLES: {
+export const SWAGGER_ERROR_RESPONSE_EXAMPLE: {
   [key: string]: ApiResponseOptions;
 } = {
   bad: {

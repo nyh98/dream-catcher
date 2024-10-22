@@ -4,7 +4,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SignUpDto } from './dto/sign-up';
 import { UserService } from 'src/user/user.service';
 import {
-  SWAGGER_ERROR_RESPONSE_EXAMPLES,
+  SWAGGER_ERROR_RESPONSE_EXAMPLE,
   SWAGGER_SUCCESS_RESPONSE_EXAMPLE,
 } from 'src/constant';
 
@@ -18,7 +18,7 @@ export class AuthController {
 
   @ApiOperation({ summary: '회원가입' })
   @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.signUp)
-  @ApiResponse(SWAGGER_ERROR_RESPONSE_EXAMPLES.bad)
+  @ApiResponse(SWAGGER_ERROR_RESPONSE_EXAMPLE.bad)
   @Post('/signUp')
   signUp(@Body() signUpDto: SignUpDto) {
     return this.userService.createUser(signUpDto);
