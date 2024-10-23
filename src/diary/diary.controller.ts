@@ -3,8 +3,8 @@ import { DiaryService } from './diary.service';
 import { CreateDiaryDto } from './dto/create-diary.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('diary')
-@Controller('diarys')
+@ApiTags('diaries')
+@Controller('diaries')
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
