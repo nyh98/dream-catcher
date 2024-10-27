@@ -8,6 +8,7 @@ import { UserRepository } from 'src/user/user.repository';
 
 describe('회원가입 테스트', () => {
   let authService: AuthService;
+  let userRepository: UserRepository;
 
   beforeEach(async () => {
     const userReposityoryMock = {
@@ -25,6 +26,7 @@ describe('회원가입 테스트', () => {
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
+    userRepository = module.get<UserRepository>(UserRepository);
   });
 
   it('정상적인 회원가입', async () => {
@@ -98,9 +100,9 @@ describe('회원가입 테스트', () => {
     };
 
     //when
-    (
-      authService['userRepository'].validateUserRegistration as jest.Mock
-    ).mockRejectedValue(new ConflictException('이미 가입된 유저 입니다'));
+    (userRepository.validateUserRegistration as jest.Mock).mockRejectedValue(
+      new ConflictException('이미 가입된 유저 입니다'),
+    );
 
     //then
     expect(authService.createUser(user)).rejects.toThrow(ConflictException);
