@@ -6,6 +6,7 @@ import {
   Patch,
   Get,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { CreateDiaryDto } from './dto/create-diary.dto';
@@ -13,12 +14,14 @@ import { ApiHeader, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/user/entities/user.entity';
 import { Request } from 'express';
 import { getUser } from 'src/decorators/get-user.decorator';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('diaries')
 @ApiHeader({
   name: 'Authorization',
   description: 'Bearer 토큰 필요 ex) Bearer abca23zf',
 })
+@UseGuards(AuthGuard)
 @Controller('diaries')
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
