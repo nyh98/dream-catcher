@@ -4,17 +4,24 @@ import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { AuthService } from 'src/auth/auth.service';
 import { SignUpDto } from 'src/auth/dto/sign-up';
+import { UserRepository } from 'src/user/user.repository';
 
 describe('회원가입 테스트', () => {
   let authService: AuthService;
 
   beforeEach(async () => {
-    const authServiceMock = {
-      createUser: jest.fn((signUpDto: SignUpDto) => ({ id: 1, ...signUpDto })),
+    const userReposityoryMock = {
+      insertUser: jest.fn((userData) => {
+        return Promise.resolve({ ...userData, id: 1 });
+      }),
+      validateUserRegistration: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [{ provide: AuthService, useValue: authServiceMock }],
+      providers: [
+        AuthService,
+        { provide: UserRepository, useValue: userReposityoryMock },
+      ],
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
@@ -91,9 +98,9 @@ describe('회원가입 테스트', () => {
     };
 
     //when
-    (authService.createUser as jest.Mock).mockRejectedValue(
-      new ConflictException('이미 가입된 유저 입니다'),
-    );
+    (
+      authService['userRepository'].validateUserRegistration as jest.Mock
+    ).mockRejectedValue(new ConflictException('이미 가입된 유저 입니다'));
 
     //then
     expect(authService.createUser(user)).rejects.toThrow(ConflictException);
