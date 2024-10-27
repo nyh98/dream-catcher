@@ -2,23 +2,30 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NextFunction, Request, Response } from 'express';
 import { AuthMiddleware } from 'src/auth/auth.middleware';
 import { AuthService } from 'src/auth/auth.service';
-import { UserRepository } from 'src/user/user.repository';
 
 describe('인증 미들웨어 테스트', () => {
   let authMiddleware: AuthMiddleware;
   let mockResponse: Response;
   let mockNext: NextFunction;
-  let userRepository: UserRepository;
-  let authService: AuthService;
 
   const user = { id: 1, name: '나용환' };
 
   beforeEach(async () => {
     mockResponse = {} as Response;
     mockNext = jest.fn();
-    userRepository = {} as UserRepository;
-    authService = new AuthService(userRepository);
-    authMiddleware = new AuthMiddleware(authService);
+
+    const authServiceMock = {
+      validKakaoToken: jest.fn().mockResolvedValue(user),
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        AuthMiddleware,
+        { provide: AuthService, useValue: authServiceMock },
+      ],
+    }).compile();
+
+    authMiddleware = module.get<AuthMiddleware>(AuthMiddleware);
   });
 
   it('유효한 인증이면 req.user에 데이터가 있어야 한다', async () => {
@@ -26,8 +33,6 @@ describe('인증 미들웨어 테스트', () => {
     const mockRequest = {
       headers: { authorization: 'Bearer token' },
     } as Request;
-
-    authService.validKakaoToken = jest.fn().mockResolvedValue(user);
 
     //when
     await authMiddleware.use(mockRequest, mockResponse, mockNext);
@@ -47,7 +52,7 @@ describe('인증 미들웨어 테스트', () => {
     await authMiddleware.use(notSchemeReq, mockResponse, mockNext);
 
     //then
-    expect(notAuthorizationReq.user).toBe(undefined);
-    expect(notSchemeReq.user).toBe(undefined);
+    expect(notAuthorizationReq.user).toBeUndefined();
+    expect(notSchemeReq.user).toBeUndefined();
   });
 });
