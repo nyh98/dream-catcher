@@ -24,7 +24,7 @@ class ContentDto implements Content {
 
 export class CreateDiaryDto {
   @ApiProperty()
-  @IsString()
+  @IsString({ message: 'title은 문자열 이여야 합니다' })
   title: string;
 
   @ApiProperty({ type: [ContentDto] })
