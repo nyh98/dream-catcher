@@ -1,16 +1,33 @@
-import { Controller, Post, Body, Delete, Patch, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Delete,
+  Patch,
+  Get,
+  Req,
+} from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { CreateDiaryDto } from './dto/create-diary.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { User } from 'src/user/entities/user.entity';
+import { Request } from 'express';
+import { getUser } from 'src/decorators/get-user.decorator';
 
 @ApiTags('diaries')
+@ApiHeader({
+  name: 'Authorization',
+  description: 'Bearer 토큰 필요 ex) Bearer abca23zf',
+})
 @Controller('diaries')
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   @ApiOperation({ summary: '일기 작성' })
   @Post()
-  createDiary(@Body() createDiaryDto: CreateDiaryDto) {}
+  createDiary(@Body() createDiaryDto: CreateDiaryDto, @getUser() user: User) {
+    return this.diaryService.createDiary(user, createDiaryDto);
+  }
 
   @ApiOperation({ summary: '여러 일기 조회' })
   @Get()
