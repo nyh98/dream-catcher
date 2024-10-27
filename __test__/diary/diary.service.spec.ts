@@ -52,12 +52,10 @@ describe('일기 작성 테스트', () => {
   });
 
   it('오늘 작성한 일기가 있으면 예외가 발생한다', async () => {
-    //when
     (diaryService.createDiary as jest.Mock).mockRejectedValue(
       new ConflictException('오늘 작성한 일기가 있습니다'),
     );
 
-    //then
     expect(diaryService.createDiary(user, input)).rejects.toThrow(
       ConflictException,
     );
