@@ -1,3 +1,4 @@
+import { ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
@@ -78,5 +79,26 @@ describe('회원가입 테스트', () => {
     expect(err).toContain('유효하지 않은 uid');
     expect(err).toContain('profileImg가 URL형식이 아닙니다');
     expect(err).toContain('name은 문자열 이여야 합니다');
+  });
+
+  it('이미 가입한 회원이면 예외를 발생 시킨다', async () => {
+    //given
+    const user: SignUpDto = {
+      name: '나용환',
+      uid: '1234',
+      provider: 'kakao',
+      profileImg: 'http://testurl.com',
+    };
+
+    //when
+    (authService.createUser as jest.Mock).mockRejectedValue(
+      new ConflictException('이미 가입된 유저 입니다'),
+    );
+
+    //then
+    expect(authService.createUser(user)).rejects.toThrow(ConflictException);
+    expect(authService.createUser(user)).rejects.toThrow(
+      '이미 가입된 유저 입니다',
+    );
   });
 });

@@ -1,5 +1,5 @@
 node_modules
-test
+__test__
 dist
 .github
 .dockerignore
