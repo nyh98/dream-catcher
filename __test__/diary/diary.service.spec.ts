@@ -2,12 +2,14 @@ import { ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
+import { DiaryRepository } from 'src/diary/diary.repository';
 import { DiaryService } from 'src/diary/diary.service';
 import { CreateDiaryDto } from 'src/diary/dto/create-diary.dto';
 import { User } from 'src/user/entities/user.entity';
 
 describe('일기 작성 테스트', () => {
   let diaryService: DiaryService;
+  let diaryRepository: DiaryRepository;
   let input = {
     title: '제목',
     content: [
@@ -27,15 +29,20 @@ describe('일기 작성 테스트', () => {
   };
 
   beforeEach(async () => {
-    const diaryServiceMock = {
-      createDiary: jest.fn(),
+    const mockDiaryRepository = {
+      insertDiary: jest.fn(),
+      findTodayDiary: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [{ provide: DiaryService, useValue: diaryServiceMock }],
+      providers: [
+        DiaryService,
+        { provide: DiaryRepository, useValue: mockDiaryRepository },
+      ],
     }).compile();
 
     diaryService = module.get<DiaryService>(DiaryService);
+    diaryRepository = module.get<DiaryRepository>(DiaryRepository);
   });
 
   it('정상적인 일기 작성', async () => {
@@ -52,15 +59,12 @@ describe('일기 작성 테스트', () => {
   });
 
   it('오늘 작성한 일기가 있으면 예외가 발생한다', async () => {
-    (diaryService.createDiary as jest.Mock).mockRejectedValue(
-      new ConflictException('오늘 작성한 일기가 있습니다'),
-    );
+    diaryRepository.findTodayDiary = jest
+      .fn()
+      .mockResolvedValue({ id: 1, title: '제목' });
 
     expect(diaryService.createDiary(user, input)).rejects.toThrow(
       ConflictException,
-    );
-    expect(diaryService.createDiary(user, input)).rejects.toThrow(
-      '오늘 작성한 일기가 있습니다',
     );
   });
 

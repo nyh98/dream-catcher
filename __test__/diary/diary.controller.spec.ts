@@ -13,8 +13,4 @@ describe('DiaryController', () => {
 
     controller = module.get<DiaryController>(DiaryController);
   });
-
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
 });

@@ -100,9 +100,9 @@ describe('회원가입 테스트', () => {
     };
 
     //when
-    (userRepository.validateUserRegistration as jest.Mock).mockRejectedValue(
-      new ConflictException('이미 가입된 유저 입니다'),
-    );
+    userRepository.validateUserRegistration = jest
+      .fn()
+      .mockRejectedValue(new ConflictException('이미 가입된 유저 입니다'));
 
     //then
     expect(authService.createUser(user)).rejects.toThrow(ConflictException);
