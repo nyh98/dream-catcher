@@ -6,7 +6,7 @@ import { DiaryService } from 'src/diary/diary.service';
 import { CreateDiaryDto } from 'src/diary/dto/create-diary.dto';
 import { User } from 'src/user/entities/user.entity';
 
-describe('DiaryService', () => {
+describe('일기 작성 테스트', () => {
   let diaryService: DiaryService;
   let input = {
     title: '제목',
