@@ -22,7 +22,7 @@ export class DiaryService {
     return this.diaryRepository.getDiary(user, diaryId);
   }
 
-  getDiarys(user: User, searchDiaryDto: SearchDiaryDto) {
+  getDiaries(user: User, searchDiaryDto: SearchDiaryDto) {
     const { year, month } = searchDiaryDto;
     return this.diaryRepository.getDiaries(user, year, month);
   }

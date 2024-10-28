@@ -5,9 +5,10 @@ import { validate } from 'class-validator';
 import { DiaryRepository } from 'src/diary/diary.repository';
 import { DiaryService } from 'src/diary/diary.service';
 import { CreateDiaryDto } from 'src/diary/dto/create-diary.dto';
+import { SearchDiaryDto } from 'src/diary/dto/search-diary.dto';
 import { User } from 'src/user/entities/user.entity';
 
-describe('일기 작성 테스트', () => {
+describe('일기 테스트', () => {
   let diaryService: DiaryService;
   let diaryRepository: DiaryRepository;
   let input = {
@@ -32,6 +33,8 @@ describe('일기 작성 테스트', () => {
     const mockDiaryRepository = {
       insertDiary: jest.fn(),
       findTodayDiary: jest.fn(),
+      getDiary: jest.fn(),
+      getDiaries: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -96,5 +99,76 @@ describe('일기 작성 테스트', () => {
     expect(JSON.stringify(invalidErr)).toContain(
       'title은 문자열 이여야 합니다',
     );
+  });
+
+  it('정상적인 단일 일기 조회', async () => {
+    //given
+    const diaryId = 10;
+    const diary = {
+      id: 10,
+      title: '제목',
+      contents: [{ seciton: '섹션', detail: '내용' }],
+      image: 'http://image.com',
+      interpretation: '해몽내용',
+      createdAt: '2024-10-28 04:46:59.769356',
+    };
+
+    diaryRepository.getDiary = jest.fn().mockResolvedValue(diary);
+
+    //when
+    const result = await diaryService.getDiary(user, diaryId);
+
+    //then
+    expect(result).toEqual(diary);
+  });
+
+  it('일기 id가 존재하지 않는 경우 null 반환', async () => {
+    //given
+    const diaryId = 990;
+    diaryRepository.getDiary = jest.fn().mockResolvedValue(null);
+
+    //when
+    const result = await diaryService.getDiary(user, diaryId);
+
+    //then
+    expect(result).toBeNull();
+  });
+
+  it('여러일기 조회 성공 케이스', async () => {
+    //given
+    const searchDto: SearchDiaryDto = { year: 2024, month: 10 };
+    const emptyDto = {}; //검색 옵션이 없으면 현재 년월로 조회
+    const resultDiaries = [
+      {
+        id: 10,
+        title: '제목',
+        contents: [{ seciton: '섹션', detail: '내용' }],
+        image: 'http://image.com',
+        interpretation: '해몽내용',
+        createdAt: '2024-10-28 04:46:59.769356',
+      },
+    ];
+    diaryRepository.getDiaries = jest.fn().mockResolvedValue(resultDiaries);
+
+    //when
+    const existDtoResult = await diaryService.getDiaries(user, searchDto);
+    const emptyDtoResult = await diaryService.getDiaries(user, emptyDto);
+
+    //then
+    expect(existDtoResult).toEqual(resultDiaries);
+    expect(emptyDtoResult).toEqual(resultDiaries);
+  });
+
+  it('여러 일기 조회시 년월에 대한 데이터가 없는 경우 빈배열을 반환한다', async () => {
+    //given
+    const searchDto: SearchDiaryDto = { year: 2555, month: 15 };
+
+    diaryRepository.getDiaries = jest.fn().mockResolvedValue([]);
+
+    //when
+    const result = await diaryService.getDiaries(user, searchDto);
+
+    //then
+    expect(result).toEqual([]);
   });
 });

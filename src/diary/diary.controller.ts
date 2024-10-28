@@ -42,7 +42,7 @@ export class DiaryController {
   @ApiOperation({ summary: '여러 일기 조회' })
   @Get()
   getDiarys(@Query() query: SearchDiaryDto, @GetUser() user: User) {
-    return this.diaryService.getDiarys(user, query);
+    return this.diaryService.getDiaries(user, query);
   }
 
   @ApiOperation({ summary: '단일 일기 조회' })
