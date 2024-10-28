@@ -1,23 +1,31 @@
 import { User } from './../user/entities/user.entity';
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { Diary } from './entities/diary.entity';
-import { Content, CreateDiaryDto } from './dto/create-diary.dto';
+import { ContentDto, CreateDiaryDto } from './dto/create-diary.dto';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
 import { Tag } from './entities/tag.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class DiaryRepository extends Repository<Diary> {
-  constructor(dataSource: DataSource) {
+  constructor(
+    dataSource: DataSource,
+    @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+  ) {
     super(Diary, dataSource.createEntityManager());
   }
 
-  private serializeContent(contnet: Content[] | string) {
+  private serializeContent(contnet: ContentDto[] | string) {
     return JSON.stringify(contnet);
   }
 
   private deserializeContent(content: string) {
     return JSON.parse(content);
+  }
+
+  private getTagsByNames(tags: string[]) {
+    return this.tagRepository.find({ where: { tag: In(tags) } });
   }
 
   private getTodayYearMonthDay() {
@@ -30,10 +38,17 @@ export class DiaryRepository extends Repository<Diary> {
   }
 
   async insertDiary(user: User, createDiaryDto: CreateDiaryDto) {
+    let tags: Tag[] = [];
+
+    if (createDiaryDto.tags) {
+      tags = await this.getTagsByNames(createDiaryDto.tags);
+    }
+
     const newDiary = this.create({
       user,
       ...createDiaryDto,
       contents: this.serializeContent(createDiaryDto.content),
+      tags,
     });
 
     await this.save(newDiary);
@@ -41,6 +56,13 @@ export class DiaryRepository extends Repository<Diary> {
 
   async updateDiary(diary: Diary, updateDiaryDto: UpdateDiaryDto) {
     let contents: string;
+    let tags: Tag[] = [];
+
+    if (updateDiaryDto.tags) {
+      tags = await this.getTagsByNames(updateDiaryDto.tags);
+    } else {
+      tags = diary.tags;
+    }
 
     if (updateDiaryDto.content) {
       contents = this.serializeContent(updateDiaryDto.content);
@@ -52,6 +74,7 @@ export class DiaryRepository extends Repository<Diary> {
       ...diary,
       ...updateDiaryDto,
       contents,
+      tags,
     });
 
     const savedDiary = await this.save(updateDiary);

@@ -35,7 +35,7 @@ export class Diary {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToMany(() => Tag, (tag) => tag.diaries)
+  @ManyToMany(() => Tag, (tag) => tag.diaries, { cascade: true })
   @JoinTable({
     name: 'diaries_tags',
     joinColumn: { name: 'diary_id', referencedColumnName: 'id' },

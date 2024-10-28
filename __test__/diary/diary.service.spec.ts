@@ -190,7 +190,7 @@ describe('일기 테스트', () => {
       interpretation: '해몽 내용',
       createdAt: new Date(),
       user,
-    };
+    } as Diary;
 
     const afterDiary: Diary = {
       id: 10,
@@ -200,7 +200,7 @@ describe('일기 테스트', () => {
       interpretation: '해몽 내용',
       createdAt: new Date(),
       user,
-    };
+    } as Diary;
 
     diaryRepository.getDiary = jest.fn().mockResolvedValue(beforeDiary);
     diaryRepository.updateDiary = jest.fn().mockResolvedValue(afterDiary);

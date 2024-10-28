@@ -38,6 +38,8 @@ export class DiaryController {
     @Body() createDiaryDto: CreateDiaryDto,
     @GetUser() user: User,
   ) {
+    console.log(createDiaryDto);
+    // return createDiaryDto;
     await this.diaryService.createDiary(user, createDiaryDto);
   }
 
