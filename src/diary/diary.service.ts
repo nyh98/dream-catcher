@@ -42,6 +42,6 @@ export class DiaryService {
       throw new NotFoundException('존재하지 않는 diaryId 입니다');
     }
 
-    await this.diaryRepository.updateDiary(diary, updateDiaryDto);
+    return this.diaryRepository.updateDiary(diary, updateDiaryDto);
   }
 }

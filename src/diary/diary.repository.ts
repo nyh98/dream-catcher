@@ -54,7 +54,7 @@ export class DiaryRepository extends Repository<Diary> {
       contents,
     });
 
-    await this.save(updateDiary);
+    return this.save(updateDiary);
   }
 
   findTodayDiary(user: User) {

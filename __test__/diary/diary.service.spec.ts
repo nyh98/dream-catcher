@@ -1,4 +1,4 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
@@ -6,6 +6,8 @@ import { DiaryRepository } from 'src/diary/diary.repository';
 import { DiaryService } from 'src/diary/diary.service';
 import { CreateDiaryDto } from 'src/diary/dto/create-diary.dto';
 import { SearchDiaryDto } from 'src/diary/dto/search-diary.dto';
+import { UpdateDiaryDto } from 'src/diary/dto/update-diary.dto';
+import { Diary } from 'src/diary/entities/diary.entity';
 import { User } from 'src/user/entities/user.entity';
 
 describe('일기 테스트', () => {
@@ -170,5 +172,62 @@ describe('일기 테스트', () => {
 
     //then
     expect(result).toEqual([]);
+  });
+
+  it('일기 수정 성공 케이스', async () => {
+    //given
+    const updateDto: UpdateDiaryDto = {
+      diaryId: 10,
+      title: '변경된 재목',
+      content: [{ section: '변경 섹션1', detail: '변경 내용1' }],
+    };
+
+    const beforeDiary: Diary = {
+      id: 10,
+      title: '제목',
+      contents: "[{ section: '기존 섹션', detail: '기존 내용' }]",
+      image: 'http://image.com',
+      interpretation: '해몽 내용',
+      createdAt: new Date(),
+      user,
+    };
+
+    const afterDiary: Diary = {
+      id: 10,
+      title: '변경된 재목',
+      contents: "[{ section: '변경 섹션1', detail: '변경 내용1' }]",
+      image: 'http://image.com',
+      interpretation: '해몽 내용',
+      createdAt: new Date(),
+      user,
+    };
+
+    diaryRepository.getDiary = jest.fn().mockResolvedValue(beforeDiary);
+    diaryRepository.updateDiary = jest.fn().mockResolvedValue(afterDiary);
+
+    //when
+    const updateDiaryDto = plainToInstance(UpdateDiaryDto, updateDto);
+    const errors = await validate(updateDiaryDto);
+    const result = await diaryService.updateDiary(user, updateDto);
+
+    //then
+    expect(errors.length).toBe(0);
+    expect(result).toEqual(afterDiary);
+  });
+
+  it('수정하려는 일기가 없으면 예외가 발생한다', () => {
+    //given
+    const updateDto: UpdateDiaryDto = {
+      diaryId: 999,
+      title: '변경된 재목',
+      content: [{ section: '변경 섹션1', detail: '변경 내용1' }],
+    };
+
+    diaryRepository.getDiary = jest.fn().mockResolvedValue(null);
+
+    //when & then
+    expect(diaryService.updateDiary(user, updateDto)).rejects.toThrow(
+      NotFoundException,
+    );
   });
 });
