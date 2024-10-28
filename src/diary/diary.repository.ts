@@ -132,4 +132,8 @@ export class DiaryRepository extends Repository<Diary> {
 
     return diaries;
   }
+
+  getAlltags() {
+    return this.tagRepository.find();
+  }
 }

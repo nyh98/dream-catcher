@@ -98,6 +98,34 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       ],
     },
   },
+
+  getTags: {
+    status: 200,
+    example: {
+      tags: [
+        {
+          id: 1,
+          tag: '악몽',
+        },
+        {
+          id: 2,
+          tag: '루시드 드림',
+        },
+        {
+          id: 3,
+          tag: '예지몽',
+        },
+        {
+          id: 4,
+          tag: '반복되는 꿈',
+        },
+        {
+          id: 5,
+          tag: '좋은 꿈',
+        },
+      ],
+    },
+  },
 };
 
 export const SWAGGER_ERROR_RESPONSE_EXAMPLE: {

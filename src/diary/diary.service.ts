@@ -32,6 +32,10 @@ export class DiaryService {
     return this.diaryRepository.getDiaries(user, year, month);
   }
 
+  getAlltags() {
+    return this.diaryRepository.getAlltags();
+  }
+
   async updateDiary(user: User, updateDiaryDto: UpdateDiaryDto) {
     const diary = await this.diaryRepository.getDiary(
       user,

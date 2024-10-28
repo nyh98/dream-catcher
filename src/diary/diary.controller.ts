@@ -49,6 +49,15 @@ export class DiaryController {
     return { diaries };
   }
 
+  @ApiOperation({ summary: '모든 태그들 조회' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.getTags)
+  @Get('/tags')
+  async getAllTags() {
+    const tags = await this.diaryService.getAlltags();
+
+    return { tags };
+  }
+
   @ApiOperation({ summary: '단일 일기 조회' })
   @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.getDiary)
   @Get('/:diaryid')
