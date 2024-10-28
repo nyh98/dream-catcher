@@ -3,9 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Diary } from './entities/diary.entity';
 import { Content, CreateDiaryDto } from './dto/create-diary.dto';
-import { retry } from 'rxjs';
-import { SearchDiaryDto } from './dto/search-diary.dto';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
+import { Tag } from './entities/tag.entity';
 
 @Injectable()
 export class DiaryRepository extends Repository<Diary> {

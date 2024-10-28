@@ -3,6 +3,8 @@ import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
+  IsNotEmpty,
+  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -25,6 +27,7 @@ class ContentDto implements Content {
 export class CreateDiaryDto {
   @ApiProperty()
   @IsString({ message: 'title은 문자열 이여야 합니다' })
+  @IsNotEmpty()
   title: string;
 
   @ApiProperty({ type: [ContentDto] })

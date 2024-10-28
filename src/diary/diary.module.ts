@@ -6,9 +6,10 @@ import { Diary } from './entities/diary.entity';
 import { DiaryRepository } from './diary.repository';
 import { AuthMiddleware } from 'src/auth/auth.middleware';
 import { AuthModule } from 'src/auth/auth.module';
+import { Tag } from './entities/tag.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Diary]), AuthModule],
+  imports: [TypeOrmModule.forFeature([Diary, Tag]), AuthModule],
   controllers: [DiaryController],
   providers: [DiaryService, DiaryRepository],
 })

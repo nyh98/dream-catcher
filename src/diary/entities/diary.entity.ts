@@ -4,9 +4,12 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Tag } from './tag.entity';
 
 @Entity()
 export class Diary {
@@ -31,4 +34,12 @@ export class Diary {
   @ManyToOne(() => User, (user) => user.diarys)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToMany(() => Tag, (tag) => tag.diaries)
+  @JoinTable({
+    name: 'diaries_tags',
+    joinColumn: { name: 'diary_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'tag_id', referencedColumnName: 'id' },
+  })
+  tags: Tag[];
 }
