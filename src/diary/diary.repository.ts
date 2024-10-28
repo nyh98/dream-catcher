@@ -84,16 +84,20 @@ export class DiaryRepository extends Repository<Diary> {
   }
 
   findTodayDiary(user: User) {
-    return this.createQueryBuilder('diary')
+    const query = this.createQueryBuilder('diary')
       .where('diary.user_id = :userId', { userId: user.id })
       .andWhere('DATE(diary.created_at) = :today', {
         today: this.getTodayYearMonthDay(),
-      })
-      .getOne();
+      });
+
+    return query.getOne();
   }
 
   async getDiary(user: User, diaryId: number) {
-    const diary = await this.findOne({ where: { id: diaryId, user } });
+    const diary = await this.findOne({
+      where: { id: diaryId, user },
+      relations: ['tags'],
+    });
 
     if (diary) {
       diary.contents = this.deserializeContent(diary.contents);
@@ -103,10 +107,9 @@ export class DiaryRepository extends Repository<Diary> {
   }
 
   async getDiaries(user: User, year?: number, month?: number) {
-    const query = this.createQueryBuilder('diary').where(
-      'diary.user_id = :userId',
-      { userId: user.id },
-    );
+    const query = this.createQueryBuilder('diary')
+      .leftJoinAndSelect('diary.tags', 'tags')
+      .where('diary.user_id = :userId', { userId: user.id });
 
     if (year) {
       query.andWhere('YEAR(diary.created_at) = :year', { year });
@@ -122,13 +125,11 @@ export class DiaryRepository extends Repository<Diary> {
 
     const diaries = await query.getMany();
 
-    const formatedDiary = diaries.map((diary) => {
-      return {
-        ...diary,
-        contents: this.deserializeContent(diary.contents),
-      };
-    });
+    for (let i = 0; i < diaries.length; i++) {
+      const serializeContent = diaries[i].contents;
+      diaries[i].contents = this.deserializeContent(serializeContent);
+    }
 
-    return formatedDiary;
+    return diaries;
   }
 }

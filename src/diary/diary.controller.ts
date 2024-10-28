@@ -38,16 +38,15 @@ export class DiaryController {
     @Body() createDiaryDto: CreateDiaryDto,
     @GetUser() user: User,
   ) {
-    console.log(createDiaryDto);
-    // return createDiaryDto;
     await this.diaryService.createDiary(user, createDiaryDto);
   }
 
   @ApiOperation({ summary: '여러 일기 조회' })
   @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.getDiaries)
   @Get()
-  getDiaries(@Query() query: SearchDiaryDto, @GetUser() user: User) {
-    return this.diaryService.getDiaries(user, query);
+  async getDiaries(@Query() query: SearchDiaryDto, @GetUser() user: User) {
+    const diaries = await this.diaryService.getDiaries(user, query);
+    return { diaries };
   }
 
   @ApiOperation({ summary: '단일 일기 조회' })

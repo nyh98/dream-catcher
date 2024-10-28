@@ -33,50 +33,47 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
           detail: '내용2',
         },
       ],
-      image: null,
-      interpretation: null,
+      image: 'http://image.com | null',
+      interpretation: ' 해몽 내용| null',
       createdAt: '2024-10-26T22:54:12.218Z',
+      tags: [
+        {
+          id: 2,
+          tag: '루시드 드림',
+        },
+      ],
     },
   },
 
   getDiaries: {
     status: 200,
-    example: [
-      {
-        id: 10,
-        title: '제목',
-        contents: [
-          {
-            section: '섹션1',
-            detail: 'ㅁㄴㅇ',
-          },
-          {
-            section: '섹션1',
-            detail: '섹션1',
-          },
-        ],
-        image: null,
-        interpretation: null,
-        createdAt: '2024-10-26T22:54:12.218Z',
-      },
-      {
-        id: 11,
-        title: '제목2',
-        contents: [
-          {
-            section: '섹션1',
-            detail: 'ㅁㄴㅇ',
-          },
-          {
-            section: '섹션1',
-            detail: '섹션1',
-          },
-        ],
-        image: null,
-        interpretation: null,
-        createdAt: '2024-10-25T03:06:20.246Z',
-      },
-    ],
+    example: {
+      diaries: [
+        {
+          id: 10,
+          title: '제목',
+          contents: [
+            {
+              section: '섹션1',
+              detail: 'ㅁㄴㅇ',
+            },
+            {
+              section: '섹션1',
+              detail: '섹션1',
+            },
+          ],
+          image: 'http://image.com | null',
+          interpretation: ' 해몽 내용| null',
+          createdAt: '2024-10-26T22:54:12.218Z',
+          tags: [
+            {
+              id: 2,
+              tag: '루시드 드림',
+            },
+          ],
+        },
+      ],
+    },
   },
 
   updateDiary: {
@@ -90,9 +87,15 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
           detail: '변경된 내용',
         },
       ],
-      image: null,
-      interpretation: null,
+      image: 'http://image.com | null',
+      interpretation: ' 해몽 내용| null',
       createdAt: '2024-10-27T19:46:59.769Z',
+      tags: [
+        {
+          id: 1,
+          tag: '악몽',
+        },
+      ],
     },
   },
 };
