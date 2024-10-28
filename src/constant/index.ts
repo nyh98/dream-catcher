@@ -78,6 +78,23 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       },
     ],
   },
+
+  updateDiary: {
+    status: 200,
+    example: {
+      id: 14,
+      title: '변경된 제목123',
+      contents: [
+        {
+          section: '변경된 섹션1',
+          detail: '변경된 내용',
+        },
+      ],
+      image: null,
+      interpretation: null,
+      createdAt: '2024-10-27T19:46:59.769Z',
+    },
+  },
 };
 
 export const SWAGGER_ERROR_RESPONSE_EXAMPLE: {

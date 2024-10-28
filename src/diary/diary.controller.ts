@@ -59,12 +59,18 @@ export class DiaryController {
   }
 
   @ApiOperation({ summary: '일기 수정' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.updateDiary)
   @Patch()
   updateDiary(@Body() updateDiaryDto: UpdateDiaryDto, @GetUser() user: User) {
     return this.diaryService.updateDiary(user, updateDiaryDto);
   }
 
   @ApiOperation({ summary: '일기 삭제' })
-  @Delete()
-  deleteDiary() {}
+  @Delete('/:diaryid')
+  deleteDiary(
+    @Param('diaryid', ParseIntPipe) diaryId: number,
+    @GetUser() user: User,
+  ) {
+    return this.diaryService.deleteDiary(user, diaryId);
+  }
 }

@@ -20,6 +20,7 @@ export class DiaryRepository extends Repository<Diary> {
   private deserializeContent(content: string) {
     return JSON.parse(content);
   }
+
   private getTodayYearMonthDay() {
     const now = new Date();
     const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
@@ -54,7 +55,10 @@ export class DiaryRepository extends Repository<Diary> {
       contents,
     });
 
-    return this.save(updateDiary);
+    const savedDiary = await this.save(updateDiary);
+    savedDiary.contents = this.deserializeContent(savedDiary.contents);
+
+    return savedDiary;
   }
 
   findTodayDiary(user: User) {

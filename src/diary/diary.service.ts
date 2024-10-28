@@ -44,4 +44,14 @@ export class DiaryService {
 
     return this.diaryRepository.updateDiary(diary, updateDiaryDto);
   }
+
+  async deleteDiary(user: User, diaryId: number) {
+    const diary = await this.diaryRepository.getDiary(user, diaryId);
+
+    if (!diary) {
+      throw new NotFoundException('존재하지 않는 diaryId 입니다');
+    }
+
+    await this.diaryRepository.remove(diary);
+  }
 }
