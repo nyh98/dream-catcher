@@ -230,4 +230,16 @@ describe('일기 테스트', () => {
       NotFoundException,
     );
   });
+
+  it('일기 삭제시 존재하지 않는 diaryId면 예외가 발생한다', () => {
+    //given
+    const diaryId = 999;
+
+    diaryRepository.getDiary = jest.fn().mockResolvedValue(null);
+
+    //when & then
+    expect(diaryService.deleteDiary(user, diaryId)).rejects.toThrow(
+      NotFoundException,
+    );
+  });
 });
