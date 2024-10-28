@@ -6,13 +6,18 @@ import {
   Patch,
   Get,
   UseGuards,
+  Param,
+  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { CreateDiaryDto } from './dto/create-diary.dto';
-import { ApiHeader, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/user/entities/user.entity';
-import { getUser } from 'src/decorators/get-user.decorator';
+import { GetUser } from 'src/decorators/get-user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { SWAGGER_SUCCESS_RESPONSE_EXAMPLE } from 'src/constant';
+import { SearchDiaryDto } from './dto/search-diary.dto';
 
 @ApiTags('diaries')
 @ApiHeader({
@@ -29,18 +34,26 @@ export class DiaryController {
   @Post()
   async createDiary(
     @Body() createDiaryDto: CreateDiaryDto,
-    @getUser() user: User,
+    @GetUser() user: User,
   ) {
     await this.diaryService.createDiary(user, createDiaryDto);
   }
 
   @ApiOperation({ summary: '여러 일기 조회' })
   @Get()
-  getDiarys() {}
+  getDiarys(@Query() query: SearchDiaryDto, @GetUser() user: User) {
+    return this.diaryService.getDiarys(user, query);
+  }
 
   @ApiOperation({ summary: '단일 일기 조회' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.getDiary)
   @Get('/:diaryid')
-  getDiary() {}
+  getDiary(
+    @Param('diaryid', ParseIntPipe) diaryId: number,
+    @GetUser() user: User,
+  ) {
+    return this.diaryService.getDiary(user, diaryId);
+  }
 
   @ApiOperation({ summary: '일기 수정' })
   @Patch()

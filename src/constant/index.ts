@@ -17,6 +17,27 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       id: 2,
     },
   },
+
+  getDiary: {
+    status: 200,
+    example: {
+      id: 10,
+      title: '제목',
+      contents: [
+        {
+          section: '섹션1',
+          detail: '내용1',
+        },
+        {
+          section: '섹션2',
+          detail: '내용2',
+        },
+      ],
+      image: null,
+      interpretation: null,
+      createdAt: '2024-10-26T22:54:12.218Z',
+    },
+  },
 };
 
 export const SWAGGER_ERROR_RESPONSE_EXAMPLE: {
