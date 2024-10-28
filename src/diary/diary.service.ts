@@ -1,8 +1,13 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDiaryDto } from './dto/create-diary.dto';
 import { DiaryRepository } from './diary.repository';
 import { User } from 'src/user/entities/user.entity';
 import { SearchDiaryDto } from './dto/search-diary.dto';
+import { UpdateDiaryDto } from './dto/update-diary.dto';
 
 @Injectable()
 export class DiaryService {
@@ -25,5 +30,18 @@ export class DiaryService {
   getDiaries(user: User, searchDiaryDto: SearchDiaryDto) {
     const { year, month } = searchDiaryDto;
     return this.diaryRepository.getDiaries(user, year, month);
+  }
+
+  async updateDiary(user: User, updateDiaryDto: UpdateDiaryDto) {
+    const diary = await this.diaryRepository.getDiary(
+      user,
+      updateDiaryDto.diaryId,
+    );
+
+    if (!diary) {
+      throw new NotFoundException('존재하지 않는 diaryId 입니다');
+    }
+
+    await this.diaryRepository.updateDiary(diary, updateDiaryDto);
   }
 }

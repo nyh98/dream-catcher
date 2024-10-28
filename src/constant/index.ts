@@ -38,6 +38,46 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       createdAt: '2024-10-26T22:54:12.218Z',
     },
   },
+
+  getDiaries: {
+    status: 200,
+    example: [
+      {
+        id: 10,
+        title: '제목',
+        contents: [
+          {
+            section: '섹션1',
+            detail: 'ㅁㄴㅇ',
+          },
+          {
+            section: '섹션1',
+            detail: '섹션1',
+          },
+        ],
+        image: null,
+        interpretation: null,
+        createdAt: '2024-10-26T22:54:12.218Z',
+      },
+      {
+        id: 11,
+        title: '제목2',
+        contents: [
+          {
+            section: '섹션1',
+            detail: 'ㅁㄴㅇ',
+          },
+          {
+            section: '섹션1',
+            detail: '섹션1',
+          },
+        ],
+        image: null,
+        interpretation: null,
+        createdAt: '2024-10-25T03:06:20.246Z',
+      },
+    ],
+  },
 };
 
 export const SWAGGER_ERROR_RESPONSE_EXAMPLE: {

@@ -5,6 +5,7 @@ import { Diary } from './entities/diary.entity';
 import { Content, CreateDiaryDto } from './dto/create-diary.dto';
 import { retry } from 'rxjs';
 import { SearchDiaryDto } from './dto/search-diary.dto';
+import { UpdateDiaryDto } from './dto/update-diary.dto';
 
 @Injectable()
 export class DiaryRepository extends Repository<Diary> {
@@ -12,7 +13,7 @@ export class DiaryRepository extends Repository<Diary> {
     super(Diary, dataSource.createEntityManager());
   }
 
-  private serializeContent(contnet: Content[]) {
+  private serializeContent(contnet: Content[] | string) {
     return JSON.stringify(contnet);
   }
 
@@ -36,6 +37,24 @@ export class DiaryRepository extends Repository<Diary> {
     });
 
     await this.save(newDiary);
+  }
+
+  async updateDiary(diary: Diary, updateDiaryDto: UpdateDiaryDto) {
+    let contents: string;
+
+    if (updateDiaryDto.content) {
+      contents = this.serializeContent(updateDiaryDto.content);
+    } else {
+      contents = this.serializeContent(diary.contents);
+    }
+
+    const updateDiary = this.create({
+      ...diary,
+      ...updateDiaryDto,
+      contents,
+    });
+
+    await this.save(updateDiary);
   }
 
   findTodayDiary(user: User) {

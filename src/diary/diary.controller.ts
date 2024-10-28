@@ -18,10 +18,12 @@ import { GetUser } from 'src/decorators/get-user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { SWAGGER_SUCCESS_RESPONSE_EXAMPLE } from 'src/constant';
 import { SearchDiaryDto } from './dto/search-diary.dto';
+import { UpdateDiaryDto } from './dto/update-diary.dto';
 
 @ApiTags('diaries')
 @ApiHeader({
   name: 'Authorization',
+  required: true,
   description:
     'Bearer 토큰 필요 ex) Bearer abca23zf 임시로 Bearer userId로 주세용',
 })
@@ -40,8 +42,9 @@ export class DiaryController {
   }
 
   @ApiOperation({ summary: '여러 일기 조회' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.getDiaries)
   @Get()
-  getDiarys(@Query() query: SearchDiaryDto, @GetUser() user: User) {
+  getDiaries(@Query() query: SearchDiaryDto, @GetUser() user: User) {
     return this.diaryService.getDiaries(user, query);
   }
 
@@ -57,7 +60,9 @@ export class DiaryController {
 
   @ApiOperation({ summary: '일기 수정' })
   @Patch()
-  updateDiary() {}
+  updateDiary(@Body() updateDiaryDto: UpdateDiaryDto, @GetUser() user: User) {
+    return this.diaryService.updateDiary(user, updateDiaryDto);
+  }
 
   @ApiOperation({ summary: '일기 삭제' })
   @Delete()
