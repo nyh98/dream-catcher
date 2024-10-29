@@ -7,7 +7,7 @@ export class Tag {
   id: number;
 
   @Column()
-  tag: string;
+  name: string;
 
   @ManyToMany(() => Diary, (diary) => diary.tags)
   diaries: Diary[];

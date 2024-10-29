@@ -128,10 +128,14 @@ describe('일기 테스트', () => {
     expect(result).toBeNull();
   });
 
-  it('여러일기 조회 성공 케이스', async () => {
+  it('년월 기준 일기들 조회 성공 케이스', async () => {
     //given
-    const searchDto: SearchDiaryDto = { year: 2024, month: 10 };
-    const emptyDto = {}; //검색 옵션이 없으면 현재 년월로 조회
+    const searchDto: SearchDiaryDto = {
+      type: 'calendar',
+      year: 2024,
+      month: 10,
+    } as SearchDiaryDto;
+    const emptyDto: SearchDiaryDto = { type: 'calendar' } as SearchDiaryDto; //검색 옵션이 없으면 현재 년월로 조회
     const resultDiaries = [
       {
         id: 10,
@@ -142,25 +146,39 @@ describe('일기 테스트', () => {
         createdAt: '2024-10-28 04:46:59.769356',
       },
     ];
-    diaryRepository.getDiaries = jest.fn().mockResolvedValue(resultDiaries);
+    diaryRepository.getDiariesByCalendar = jest
+      .fn()
+      .mockResolvedValue(resultDiaries);
 
     //when
-    const existDtoResult = await diaryService.getDiaries(user, searchDto);
-    const emptyDtoResult = await diaryService.getDiaries(user, emptyDto);
+    const existDtoResult = await diaryService.getDiariesByCalendar(
+      user,
+      searchDto.year,
+      searchDto.month,
+    );
+    const emptyDtoResult = await diaryService.getDiariesByCalendar(user);
 
     //then
     expect(existDtoResult).toEqual(resultDiaries);
     expect(emptyDtoResult).toEqual(resultDiaries);
   });
 
-  it('여러 일기 조회시 년월에 대한 데이터가 없는 경우 빈배열을 반환한다', async () => {
+  it('년월 일기 조회시 년월에 대한 데이터가 없는 경우 빈배열을 반환한다', async () => {
     //given
-    const searchDto: SearchDiaryDto = { year: 2555, month: 15 };
+    const searchDto: SearchDiaryDto = {
+      type: 'calendar',
+      year: 2555,
+      month: 15,
+    } as SearchDiaryDto;
 
-    diaryRepository.getDiaries = jest.fn().mockResolvedValue([]);
+    diaryRepository.getDiariesByCalendar = jest.fn().mockResolvedValue([]);
 
     //when
-    const result = await diaryService.getDiaries(user, searchDto);
+    const result = await diaryService.getDiariesByCalendar(
+      user,
+      searchDto.year,
+      searchDto.month,
+    );
 
     //then
     expect(result).toEqual([]);

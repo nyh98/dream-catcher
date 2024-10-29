@@ -25,7 +25,7 @@ export class DiaryRepository extends Repository<Diary> {
   }
 
   private getTagsByNames(tags: string[]) {
-    return this.tagRepository.find({ where: { tag: In(tags) } });
+    return this.tagRepository.find({ where: { name: In(tags) } });
   }
 
   private getTodayYearMonthDay() {
@@ -106,7 +106,7 @@ export class DiaryRepository extends Repository<Diary> {
     return diary;
   }
 
-  async getDiaries(user: User, year?: number, month?: number) {
+  async getDiariesByCalendar(user: User, year?: number, month?: number) {
     const query = this.createQueryBuilder('diary')
       .leftJoinAndSelect('diary.tags', 'tags')
       .where('diary.user_id = :userId', { userId: user.id });
@@ -131,6 +131,24 @@ export class DiaryRepository extends Repository<Diary> {
     }
 
     return diaries;
+  }
+
+  async getAllDiaries(user: User, limit: number, page: number) {
+    const query = this.createQueryBuilder('diary')
+      .leftJoinAndSelect('diary.tags', 'tags')
+      .where('diary.user_id = :userId', { userId: user.id })
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const diaries = await query.getMany();
+    const totalCount = await query.getCount();
+
+    for (let i = 0; i < diaries.length; i++) {
+      const serializeContent = diaries[i].contents;
+      diaries[i].contents = this.deserializeContent(serializeContent);
+    }
+
+    return { diaries, totalCount };
   }
 
   getAlltags() {

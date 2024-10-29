@@ -19,7 +19,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { SWAGGER_SUCCESS_RESPONSE_EXAMPLE } from 'src/constant';
 import { SearchDiaryDto } from './dto/search-diary.dto';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
-import { OneFieldRequiredPipe } from 'src/custom/pipes/diary-pipe';
+import { OneFieldRequiredPipe } from 'src/custom/pipes/one-field-required-pipe.ts';
 
 @ApiTags('diaries')
 @ApiHeader({
@@ -45,9 +45,35 @@ export class DiaryController {
   @ApiOperation({ summary: '여러 일기 조회' })
   @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.getDiaries)
   @Get()
-  async getDiaries(@Query() query: SearchDiaryDto, @GetUser() user: User) {
-    const diaries = await this.diaryService.getDiaries(user, query);
-    return { diaries };
+  async getDiaries(
+    @Query() searchDiaryDto: SearchDiaryDto,
+    @GetUser() user: User,
+  ) {
+    console.log(searchDiaryDto.type);
+    if (searchDiaryDto.type === 'calendar') {
+      const { year, month } = searchDiaryDto;
+      const diaries = await this.diaryService.getDiariesByCalendar(
+        user,
+        year,
+        month,
+      );
+      return { diaries };
+    }
+
+    if (searchDiaryDto.type === 'list') {
+      const { limit, page } = searchDiaryDto;
+      const { diaries, totalCount } = await this.diaryService.getAllDiaries(
+        user,
+        limit,
+        page,
+      );
+
+      return {
+        diaries,
+        currentPage: page,
+        totalCount: Math.ceil(totalCount / limit),
+      };
+    }
   }
 
   @ApiOperation({ summary: '모든 태그들 조회' })

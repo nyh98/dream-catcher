@@ -6,7 +6,6 @@ import {
 import { CreateDiaryDto } from './dto/create-diary.dto';
 import { DiaryRepository } from './diary.repository';
 import { User } from 'src/user/entities/user.entity';
-import { SearchDiaryDto } from './dto/search-diary.dto';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
 
 @Injectable()
@@ -27,9 +26,12 @@ export class DiaryService {
     return this.diaryRepository.getDiary(user, diaryId);
   }
 
-  getDiaries(user: User, searchDiaryDto: SearchDiaryDto) {
-    const { year, month } = searchDiaryDto;
-    return this.diaryRepository.getDiaries(user, year, month);
+  getDiariesByCalendar(user: User, year?: number, month?: number) {
+    return this.diaryRepository.getDiariesByCalendar(user, year, month);
+  }
+
+  getAllDiaries(user: User, limit: number, page: number) {
+    return this.diaryRepository.getAllDiaries(user, limit, page);
   }
 
   getAlltags() {
