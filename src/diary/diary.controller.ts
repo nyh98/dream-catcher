@@ -35,11 +35,11 @@ export class DiaryController {
 
   @ApiOperation({ summary: '일기 작성' })
   @Post()
-  async createDiary(
+  createDiary(
     @Body(OneFieldRequiredPipe) createDiaryDto: CreateDiaryDto,
     @GetUser() user: User,
   ) {
-    await this.diaryService.createDiary(user, createDiaryDto);
+    return this.diaryService.createDiary(user, createDiaryDto);
   }
 
   @ApiOperation({ summary: '여러 일기 조회' })

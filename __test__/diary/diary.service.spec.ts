@@ -13,12 +13,15 @@ import { User } from 'src/user/entities/user.entity';
 describe('일기 테스트', () => {
   let diaryService: DiaryService;
   let diaryRepository: DiaryRepository;
-  let input = {
+  let input: CreateDiaryDto = {
     title: '제목',
-    content: [
-      { section: '섹션1', detail: 'ㅁㄴㅇ' },
-      { section: '섹션1', detail: '섹션1' },
-    ],
+    templateType: 'beginner',
+    content: {
+      sections: [
+        { section: '섹션1', detail: 'ㅁㄴㅇ' },
+        { section: '섹션1', detail: '섹션1' },
+      ],
+    },
   };
 
   let user: User = {
@@ -75,31 +78,35 @@ describe('일기 테스트', () => {
 
   it('유효하지 않은 형식이면 예외가 발생한다', async () => {
     //given
-    const notArrayContnet = {
+    const invalidContnet = {
       title: '제목',
+      templateType: 'beginner',
       content: { section: '섹션1', detail: 'ㅁㄴㅇ' },
     };
 
     const invalidInput = {
       title: 123,
-      content: [{ section: 123, detail: 'ㅁㄴㅇ' }],
+      content: { sections: [{ section: '섹션1', detail: 123 }] },
+      templateType: 'no',
     };
 
     //when
-    const notArrayError = plainToInstance(CreateDiaryDto, notArrayContnet);
+    const contentErrors = plainToInstance(CreateDiaryDto, invalidContnet);
     const invalidErrors = plainToInstance(CreateDiaryDto, invalidInput);
-    const arrayErr = await validate(notArrayError);
+    const contentErr = await validate(contentErrors);
     const invalidErr = await validate(invalidErrors);
 
     //then
-    expect(JSON.stringify(arrayErr)).toContain(
-      'content는 리스트 형식이여야 합니다',
-    );
+
+    expect(JSON.stringify(contentErr)).toContain('유효하지 않은 content 형식');
     expect(JSON.stringify(invalidErr)).toContain(
-      'section은 문자열 이여야 합니다',
+      'detail은 문자열 이여야 합니다',
     );
     expect(JSON.stringify(invalidErr)).toContain(
       'title은 문자열 이여야 합니다',
+    );
+    expect(JSON.stringify(invalidErr)).toContain(
+      '유효하지 않은 템플릿 타입 입니다',
     );
   });
 
@@ -179,7 +186,12 @@ describe('일기 테스트', () => {
     const updateDto: UpdateDiaryDto = {
       diaryId: 10,
       title: '변경된 재목',
-      content: [{ section: '변경 섹션1', detail: '변경 내용1' }],
+      content: {
+        sections: [
+          { section: '섹션1', detail: 'ㅁㄴㅇ' },
+          { section: '섹션1', detail: '섹션1' },
+        ],
+      },
     };
 
     const beforeDiary: Diary = {
@@ -220,7 +232,12 @@ describe('일기 테스트', () => {
     const updateDto: UpdateDiaryDto = {
       diaryId: 999,
       title: '변경된 재목',
-      content: [{ section: '변경 섹션1', detail: '변경 내용1' }],
+      content: {
+        sections: [
+          { section: '섹션1', detail: 'ㅁㄴㅇ' },
+          { section: '섹션1', detail: '섹션1' },
+        ],
+      },
     };
 
     diaryRepository.getDiary = jest.fn().mockResolvedValue(null);

@@ -21,25 +21,25 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
   getDiary: {
     status: 200,
     example: {
-      id: 10,
-      title: '제목',
-      contents: [
-        {
-          section: '섹션1',
-          detail: '내용1',
-        },
-        {
-          section: '섹션2',
-          detail: '내용2',
-        },
-      ],
-      image: 'http://image.com | null',
-      interpretation: ' 해몽 내용| null',
-      createdAt: '2024-10-26T22:54:12.218Z',
+      id: 36,
+      title: '잠온다..',
+      contents: {
+        sections: [
+          {
+            section: '등장인물',
+            detail: 'qwe',
+          },
+        ],
+        freeContent: null,
+      },
+      image: null,
+      interpretation: null,
+      createdAt: '2024-10-28T22:57:00.639Z',
+      templateType: 'beginner',
       tags: [
         {
-          id: 2,
-          tag: '루시드 드림',
+          id: 3,
+          tag: '예지몽',
         },
       ],
     },
@@ -52,19 +52,19 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
         {
           id: 10,
           title: '제목',
-          contents: [
-            {
-              section: '섹션1',
-              detail: 'ㅁㄴㅇ',
-            },
-            {
-              section: '섹션1',
-              detail: '섹션1',
-            },
-          ],
-          image: 'http://image.com | null',
-          interpretation: ' 해몽 내용| null',
+          contents: {
+            sections: [
+              {
+                section: '등장인물',
+                detail: 'qwe',
+              },
+            ],
+            freeContent: null,
+          },
+          image: null,
+          interpretation: null,
           createdAt: '2024-10-26T22:54:12.218Z',
+          templateType: 'beginner',
           tags: [
             {
               id: 2,
@@ -81,12 +81,15 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
     example: {
       id: 14,
       title: '변경된 제목123',
-      contents: [
-        {
-          section: '변경된 섹션1',
-          detail: '변경된 내용',
-        },
-      ],
+      contents: {
+        sections: [
+          {
+            section: '변경된 섹션',
+            detail: '변경된 내용',
+          },
+        ],
+        freeContent: null,
+      },
       image: 'http://image.com | null',
       interpretation: ' 해몽 내용| null',
       createdAt: '2024-10-27T19:46:59.769Z',
