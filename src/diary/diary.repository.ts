@@ -16,7 +16,7 @@ export class DiaryRepository extends Repository<Diary> {
     super(Diary, dataSource.createEntityManager());
   }
 
-  private serializeContent(contnet: ContentDto[] | string) {
+  private serializeContent(contnet: ContentDto | string) {
     return JSON.stringify(contnet);
   }
 

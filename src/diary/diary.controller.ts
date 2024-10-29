@@ -14,11 +14,12 @@ import { DiaryService } from './diary.service';
 import { CreateDiaryDto } from './dto/create-diary.dto';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/user/entities/user.entity';
-import { GetUser } from 'src/decorators/get-user.decorator';
+import { GetUser } from 'src/custom/decorators/get-user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { SWAGGER_SUCCESS_RESPONSE_EXAMPLE } from 'src/constant';
 import { SearchDiaryDto } from './dto/search-diary.dto';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
+import { OneFieldRequiredPipe } from 'src/custom/pipes/diary-pipe';
 
 @ApiTags('diaries')
 @ApiHeader({
@@ -35,7 +36,7 @@ export class DiaryController {
   @ApiOperation({ summary: '일기 작성' })
   @Post()
   async createDiary(
-    @Body() createDiaryDto: CreateDiaryDto,
+    @Body(OneFieldRequiredPipe) createDiaryDto: CreateDiaryDto,
     @GetUser() user: User,
   ) {
     await this.diaryService.createDiary(user, createDiaryDto);

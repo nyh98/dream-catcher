@@ -3,13 +3,16 @@ import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
+  IsIn,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { templateTpyes, TemplateType } from 'src/custom/types/types';
 
-export class ContentDto {
+class Sections {
   @ApiProperty()
   @IsString({ message: 'section은 문자열 이여야 합니다' })
   section: string;
@@ -19,18 +22,45 @@ export class ContentDto {
   detail: string;
 }
 
+export class ContentDto {
+  @ApiProperty({
+    required: false,
+    type: Sections,
+    example: '[{ section: 등장 인물, detail: 나용환 }] | null',
+  })
+  @IsOptional()
+  @IsArray({ message: 'sections 리스트 형식이여야 합니다' })
+  @ArrayNotEmpty({ message: 'sections 리스트가 비어있습니다' })
+  @ValidateNested({ each: true, message: '유효하지 않은 sections 형식' })
+  sections?: Sections[] | null = null;
+
+  @ApiProperty({
+    required: false,
+    example: 'string | null',
+    type: String,
+  })
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  freeContent?: string | null = null;
+}
+
 export class CreateDiaryDto {
   @ApiProperty()
   @IsString({ message: 'title은 문자열 이여야 합니다' })
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty({ type: [ContentDto] })
-  @IsArray({ message: 'content는 리스트 형식이여야 합니다' })
-  @ArrayNotEmpty({ message: 'content 리스트가 비어있습니다' })
-  @ValidateNested({ each: true })
+  @ApiProperty({ example: "'beginner' | 'expert' | 'free'" })
+  @IsIn(templateTpyes, { message: '유효하지 않은 템플릿 타입 입니다' })
+  templateType: TemplateType;
+
+  @ApiProperty({ type: ContentDto })
+  @IsNotEmpty()
+  @IsObject()
+  @ValidateNested({ each: true, message: '유효하지 않은 content 형식' })
   @Type(() => ContentDto)
-  content: ContentDto[];
+  content: ContentDto;
 
   @ApiProperty({ required: false, type: ['string'], example: ['악몽'] })
   @IsOptional()

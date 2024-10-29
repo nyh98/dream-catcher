@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Tag } from './tag.entity';
+import { TemplateType } from 'src/custom/types/types';
 
 @Entity()
 export class Diary {
@@ -30,6 +31,9 @@ export class Diary {
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
+
+  @Column({ name: 'template_type' })
+  templateType: TemplateType;
 
   @ManyToOne(() => User, (user) => user.diarys)
   @JoinColumn({ name: 'user_id' })
