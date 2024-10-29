@@ -12,10 +12,10 @@ export class OneFieldRequiredPipe implements PipeTransform {
   transform(value: CreateDiaryDto, metadata: ArgumentMetadata) {
     try {
       const { content } = value;
-      console.log(content);
+
       if (!content.freeContent && !content.sections) {
         throw new BadRequestException(
-          'sections와 freeContent중 하나의 필드는 존재해야 합니다',
+          'content.sections 또는 content.freeContent 가 없습니다',
         );
       }
 

@@ -4,7 +4,6 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsIn,
-  IsInstance,
   IsNotEmpty,
   IsObject,
   IsOptional,
@@ -62,8 +61,7 @@ export class CreateDiaryDto {
   @ApiProperty({ type: ContentDto })
   @IsNotEmpty()
   @IsObject()
-  @IsInstance(ContentDto, { message: 'te' })
-  @ValidateNested({ each: true, message: '유효하지 않은 content 형식' })
+  @ValidateNested({ each: true })
   @Type(() => ContentDto)
   content: ContentDto;
 
