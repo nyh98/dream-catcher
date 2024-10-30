@@ -31,6 +31,7 @@ describe('일기 테스트', () => {
     profileImg: 'http://example.com/image.jpg',
     provider: 'kakao',
     uid: '12345',
+    templateType: 'beginner',
     diarys: [],
   };
 

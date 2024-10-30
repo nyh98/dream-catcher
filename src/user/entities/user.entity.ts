@@ -21,6 +21,9 @@ export class User {
   @Column()
   uid: string;
 
+  @Column()
+  templateType: string;
+
   @OneToMany(() => Diary, (diary) => diary)
   diarys: Diary[];
 }
