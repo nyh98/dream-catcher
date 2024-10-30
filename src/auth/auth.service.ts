@@ -8,6 +8,7 @@ import { AxiosError } from 'axios';
 import {
   DecodedKakaoToken,
   KakaoAuthResponse,
+  RefreshKakaoTorkenRes,
   TokenData,
 } from 'src/types/types';
 
@@ -60,10 +61,8 @@ export class AuthService {
         .pipe(
           catchError((err: AxiosError) => {
             const message = err.message;
-            let status = err.status || 400;
-            if (status === 401) {
-              status = 400;
-            }
+            const status = err.status || 400;
+
             throw new HttpException(message, status);
           }),
         ),
@@ -111,6 +110,33 @@ export class AuthService {
             const message = err.message;
             const status = err.status || 400;
             console.error(err.response?.data);
+            throw new HttpException(message, status);
+          }),
+        ),
+    );
+
+    return response.data;
+  }
+
+  async refreshKakaoToken(refreshToken: string) {
+    const body = {
+      grant_type: 'refresh_token',
+      client_id: this.configService.get<string>('KAKAO_REST_API_KEY'),
+      refresh_token: refreshToken,
+    };
+    const response = await firstValueFrom(
+      this.httpService
+        .post<RefreshKakaoTorkenRes>(
+          'https://kauth.kakao.com/oauth/token',
+          body,
+          {
+            headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+          },
+        )
+        .pipe(
+          catchError((err: AxiosError) => {
+            const message = err.message;
+            const status = err.status || 400;
             throw new HttpException(message, status);
           }),
         ),

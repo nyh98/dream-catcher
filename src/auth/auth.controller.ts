@@ -1,11 +1,18 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { SignUpDto } from './dto/sign-up';
 import {
   SWAGGER_ERROR_RESPONSE_EXAMPLE,
   SWAGGER_SUCCESS_RESPONSE_EXAMPLE,
 } from 'src/constant/swaager-example';
+import { RefreshTokenDto } from './dto/token.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -41,5 +48,13 @@ export class AuthController {
       accessToken: access_token,
       refreshToken: refresh_token,
     };
+  }
+
+  @ApiOperation({ summary: 'accessToken 갱신' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.refreshToken)
+  @Post('/kakao/token')
+  refreshKakaoToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    const { refreshToken } = refreshTokenDto;
+    return this.authService.refreshKakaoToken(refreshToken);
   }
 }

@@ -39,3 +39,11 @@ export interface TokenData {
   app_id: number;
   appId: number;
 }
+
+export interface RefreshKakaoTorkenRes {
+  access_token: string;
+  token_type: 'bearer';
+  refresh_token?: string; //optional
+  refresh_token_expires_in?: 5184000; //optional
+  expires_in: 43199;
+}

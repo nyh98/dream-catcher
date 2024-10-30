@@ -15,7 +15,7 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       provider: 'kakao',
       uid: 12345,
       email: null,
-      id: 2,
+      id: '2',
       accessToken: 'asdasfadfg',
       refreshToken: 'asdasd',
     },
@@ -160,7 +160,18 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
     },
   },
 
-  getSections: { status: 200, example: { sections: ['핵심사건', '태그'] } },
+  refreshToken: {
+    status: 201,
+    example: {
+      access_token: 'string',
+      token_type: 'bearer',
+      refresh_token:
+        'string //기존 리프레시 토큰의 유효기간이 1개월 미만인 경우에만 갱신 ',
+      refresh_token_expires_in:
+        '518400 //새로 리프레시 토큰이 발급되면 주는것같음',
+      expires_in: 43199,
+    },
+  },
 };
 
 export const SWAGGER_ERROR_RESPONSE_EXAMPLE: {
