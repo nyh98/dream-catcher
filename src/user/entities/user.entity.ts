@@ -19,7 +19,7 @@ export class User {
   provider: 'kakao' | 'google';
 
   @Column()
-  uid: number;
+  uid: string;
 
   @Column()
   templateType: string;

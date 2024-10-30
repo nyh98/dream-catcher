@@ -26,7 +26,7 @@ export class AuthService {
     const { nickname, profile_image } = properties;
 
     const newUser = this.userRepository.create({
-      uid: id,
+      uid: id.toString(),
       name: nickname,
       profileImg: profile_image,
       provider: 'kakao',
@@ -36,7 +36,9 @@ export class AuthService {
   }
 
   getKakaoUser(uid: number) {
-    return this.userRepository.findOne({ where: { uid, provider: 'kakao' } });
+    return this.userRepository.findOne({
+      where: { uid: uid.toString(), provider: 'kakao' },
+    });
   }
 
   //임시 인증 함수
