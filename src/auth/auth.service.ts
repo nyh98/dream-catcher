@@ -1,11 +1,15 @@
-import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/user/user.repository';
 import { SignUpDto } from './dto/sign-up';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { catchError, first, firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom } from 'rxjs';
 import { AxiosError } from 'axios';
-import { DecodedKakaoToken, KakaoAuthResponse } from 'src/types/types';
+import {
+  DecodedKakaoToken,
+  KakaoAuthResponse,
+  TokenData,
+} from 'src/types/types';
 
 @Injectable()
 export class AuthService {
@@ -36,17 +40,36 @@ export class AuthService {
     return this.userRepository.save(newUser);
   }
 
-  getKakaoUser(uid: number) {
+  getKakaoUser(uid: string) {
     return this.userRepository.findOne({
-      where: { uid: uid.toString(), provider: 'kakao' },
+      where: { uid, provider: 'kakao' },
     });
   }
 
   //임시 인증 함수
-  validKakaoToken(token: number) {
-    //임시로 id값만 받음
-    //나중에 토큰 검증 로직 구현할것
-    return this.userRepository.findOne({ where: { id: token } });
+  getUserById(id: number) {
+    return this.userRepository.findOne({ where: { id } });
+  }
+
+  async validKakaoToken(accessToken: string) {
+    const response = await firstValueFrom(
+      this.httpService
+        .get<TokenData>('https://kapi.kakao.com/v1/user/access_token_info', {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .pipe(
+          catchError((err: AxiosError) => {
+            const message = err.message;
+            let status = err.status || 400;
+            if (status === 401) {
+              status = 400;
+            }
+            throw new HttpException(message, status);
+          }),
+        ),
+    );
+
+    return response.data;
   }
 
   async getKakaoToken(authCode: string) {
@@ -68,7 +91,7 @@ export class AuthService {
           catchError((err: AxiosError) => {
             const message = err.message;
             const status = err.status || 400;
-            console.log(err.response?.data);
+            console.error(err.response?.data);
             throw new HttpException(message, status);
           }),
         ),
@@ -87,7 +110,7 @@ export class AuthService {
           catchError((err: AxiosError) => {
             const message = err.message;
             const status = err.status || 400;
-            console.log(err.response?.data);
+            console.error(err.response?.data);
             throw new HttpException(message, status);
           }),
         ),

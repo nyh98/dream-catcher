@@ -9,8 +9,7 @@ import { User } from './entities/user.entity';
 @ApiHeader({
   name: 'Authorization',
   required: true,
-  description:
-    'Bearer 토큰 필요 ex) Bearer abca23zf 임시로 Bearer userId로 주세용',
+  description: 'Bearer 토큰 필요 ex) Bearer abca23zf',
 })
 @UseGuards(AuthGuard)
 @Controller('users')

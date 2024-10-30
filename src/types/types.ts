@@ -31,3 +31,11 @@ export interface DecodedKakaoToken {
     };
   };
 }
+
+export interface TokenData {
+  expiresInMillis: number;
+  id: number;
+  expires_in: number;
+  app_id: number;
+  appId: number;
+}

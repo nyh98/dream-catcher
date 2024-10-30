@@ -25,22 +25,19 @@ export class AuthController {
   @ApiOperation({ summary: '카카오 로그인' })
   @Post('/kakao')
   async kakaoLogin(@Query('code') authCode: string) {
-    console.log('code :', authCode);
     const kakaoRespone = await this.authService.getKakaoToken(authCode);
 
     const { access_token, refresh_token } = kakaoRespone;
     const userData = await this.authService.decodeKakaoToken(access_token);
 
-    const user = await this.authService.getKakaoUser(userData.id);
+    let user = await this.authService.getKakaoUser(userData.id.toString());
 
-    if (user) {
-      return user;
+    if (!user) {
+      user = await this.authService.createKakaoUser(userData);
     }
-    console.log(userData);
-    const newUser = await this.authService.createKakaoUser(userData);
 
     return {
-      ...newUser,
+      ...user,
       accessToken: access_token,
       refreshToken: refresh_token,
     };

@@ -16,10 +16,16 @@ export class AuthMiddleware implements NestMiddleware {
     const [authScheme, token] = credentials.split(' ');
 
     if (authScheme === 'Bearer' && token) {
-      //토큰 검증 로직 추가하기
-
       //임시 로직
-      const user = await this.authService.validKakaoToken(Number(token));
+      const userId = Number(token);
+      if (userId) {
+        const user = await this.authService.getUserById(userId);
+        user && (req.user = user);
+        return next();
+      }
+      //토큰 검증
+      const tokenData = await this.authService.validKakaoToken(token);
+      const user = await this.authService.getKakaoUser(tokenData.id.toString());
       user && (req.user = user);
     }
 
