@@ -9,12 +9,15 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
     status: 201,
     example: {
       name: '나용환1',
+      templateType: 'beginner',
       profileImg:
         'https://cdn.pixabay.com/photo/2024/05/29/16/49/lizard-8796682_640.jpg',
       provider: 'kakao',
-      uid: '12345',
+      uid: 12345,
       email: null,
       id: 2,
+      accessToken: 'asdasfadfg',
+      refreshToken: 'asdasd',
     },
   },
 

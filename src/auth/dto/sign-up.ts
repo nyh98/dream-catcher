@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
@@ -17,9 +18,9 @@ export class SignUpDto {
   email?: string;
 
   @ApiProperty({ example: '123456' })
-  @IsNumberString({}, { message: '유효하지 않은 uid' })
+  @IsNumber({}, { message: '유효하지 않은 uid' })
   @IsNotEmpty({ message: 'uid가 없습니다' })
-  uid: string;
+  uid: number;
 
   @ApiProperty({ example: '나용환' })
   @IsString({ message: 'name은 문자열 이여야 합니다' })

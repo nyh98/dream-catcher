@@ -6,11 +6,12 @@ import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 import { AuthMiddleware } from 'src/auth/auth.middleware';
 import { AuthService } from 'src/auth/auth.service';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User]), AuthModule],
   controllers: [UserController],
-  providers: [UserService, UserRepository, AuthService],
+  providers: [UserService, UserRepository],
 })
 export class UserModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

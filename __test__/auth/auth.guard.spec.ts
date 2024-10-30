@@ -22,7 +22,7 @@ describe('인가 가드 테스트', () => {
     mockRequest.user = {
       id: 1,
       name: '나용환',
-      uid: '1234',
+      uid: 1234,
       provider: 'kakao',
       profileImg: 'http://testurl.com',
       email: 'abc@abc.com',
