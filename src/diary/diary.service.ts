@@ -13,12 +13,6 @@ export class DiaryService {
   constructor(private readonly diaryRepository: DiaryRepository) {}
 
   async createDiary(user: User, createDiaryDto: CreateDiaryDto) {
-    const diary = await this.diaryRepository.findTodayDiary(user);
-
-    if (diary) {
-      throw new ConflictException('오늘 이미 작성한 일기가 있습니다');
-    }
-
     return this.diaryRepository.insertDiary(user, createDiaryDto);
   }
 
@@ -30,8 +24,8 @@ export class DiaryService {
     return this.diaryRepository.getDiariesByCalendar(user, year, month);
   }
 
-  getAllDiaries(user: User, limit: number, page: number) {
-    return this.diaryRepository.getAllDiaries(user, limit, page);
+  getAllDiaries(user: User, limit: number, page: number, text?: string) {
+    return this.diaryRepository.getAllDiaries(user, limit, page, text);
   }
 
   getAlltags() {

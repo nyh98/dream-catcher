@@ -10,7 +10,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { templateTpyes, TemplateType } from 'src/custom/types/types';
+import { templateTpyes, TemplateType } from 'src/types/types';
 
 class Section {
   @ApiProperty()

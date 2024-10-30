@@ -9,6 +9,7 @@ import {
   Param,
   ParseIntPipe,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { CreateDiaryDto } from './dto/create-diary.dto';
@@ -16,8 +17,8 @@ import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/user/entities/user.entity';
 import { GetUser } from 'src/custom/decorators/get-user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { SWAGGER_SUCCESS_RESPONSE_EXAMPLE } from 'src/constant';
-import { SearchDiaryDto } from './dto/search-diary.dto';
+import { SWAGGER_SUCCESS_RESPONSE_EXAMPLE } from 'src/constant/swaager-example';
+import { GetSectionDto, SearchDiaryDto } from './dto/search-diary.dto';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
 import { OneFieldRequiredPipe } from 'src/custom/pipes/one-field-required-pipe.ts';
 
@@ -49,7 +50,6 @@ export class DiaryController {
     @Query() searchDiaryDto: SearchDiaryDto,
     @GetUser() user: User,
   ) {
-    console.log(searchDiaryDto.type);
     if (searchDiaryDto.type === 'calendar') {
       const { year, month } = searchDiaryDto;
       const diaries = await this.diaryService.getDiariesByCalendar(
@@ -61,11 +61,12 @@ export class DiaryController {
     }
 
     if (searchDiaryDto.type === 'list') {
-      const { limit, page } = searchDiaryDto;
+      const { limit, page, text } = searchDiaryDto;
       const { diaries, totalCount } = await this.diaryService.getAllDiaries(
         user,
         limit,
         page,
+        text,
       );
 
       return {
@@ -84,6 +85,24 @@ export class DiaryController {
 
     return { tags };
   }
+
+  // @ApiOperation({ summary: '모든 섹션들 조회' })
+  // @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.getSections)
+  // @Get('/sections')
+  // getAllSections(@Query() query: GetSectionDto) {
+  //   // const { template } = query;
+  //   // let sections: string[] = [];
+  //   // if (template === 'beginner') {
+  //   //   sections = ['핵심사건', '태그'];
+  //   // }
+  //   // if (template === 'expert') {
+  //   //   sections = ['핵심사건', '등장 인물', '장소', '감정', '태그'];
+  //   // }
+  //   // if (template === 'free') {
+  //   //   sections = ['태그'];
+  //   // }
+  //   // return { sections };
+  // }
 
   @ApiOperation({ summary: '단일 일기 조회' })
   @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.getDiary)

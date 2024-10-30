@@ -1,6 +1,6 @@
 import { User } from './../user/entities/user.entity';
 import { Injectable } from '@nestjs/common';
-import { DataSource, In, Repository } from 'typeorm';
+import { Brackets, DataSource, In, Repository } from 'typeorm';
 import { Diary } from './entities/diary.entity';
 import { ContentDto, CreateDiaryDto } from './dto/create-diary.dto';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
@@ -133,12 +133,22 @@ export class DiaryRepository extends Repository<Diary> {
     return diaries;
   }
 
-  async getAllDiaries(user: User, limit: number, page: number) {
+  async getAllDiaries(user: User, limit: number, page: number, text?: string) {
+    console.log(text);
     const query = this.createQueryBuilder('diary')
       .leftJoinAndSelect('diary.tags', 'tags')
       .where('diary.user_id = :userId', { userId: user.id })
       .skip((page - 1) * limit)
       .take(limit);
+
+    if (text) {
+      query.andWhere(
+        new Brackets((qb) => {
+          qb.where('diary.contents like :text', { text: `%${text}%` });
+          qb.orWhere('diary.title like :title', { title: `%${text}%` });
+        }),
+      );
+    }
 
     const diaries = await query.getMany();
     const totalCount = await query.getCount();

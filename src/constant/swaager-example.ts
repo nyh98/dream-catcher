@@ -39,7 +39,7 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       tags: [
         {
           id: 3,
-          tag: '예지몽',
+          name: '예지몽',
         },
       ],
     },
@@ -68,7 +68,7 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
           tags: [
             {
               id: 2,
-              tag: '루시드 드림',
+              name: '루시드 드림',
             },
           ],
         },
@@ -96,7 +96,7 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       tags: [
         {
           id: 1,
-          tag: '악몽',
+          name: '악몽',
         },
       ],
     },
@@ -108,27 +108,29 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       tags: [
         {
           id: 1,
-          tag: '악몽',
+          name: '악몽',
         },
         {
           id: 2,
-          tag: '루시드 드림',
+          name: '루시드 드림',
         },
         {
           id: 3,
-          tag: '예지몽',
+          name: '예지몽',
         },
         {
           id: 4,
-          tag: '반복되는 꿈',
+          name: '반복되는 꿈',
         },
         {
           id: 5,
-          tag: '좋은 꿈',
+          name: '좋은 꿈',
         },
       ],
     },
   },
+
+  getSections: { status: 200, example: { sections: ['핵심사건', '태그'] } },
 };
 
 export const SWAGGER_ERROR_RESPONSE_EXAMPLE: {

@@ -5,7 +5,7 @@ import { SignUpDto } from './dto/sign-up';
 import {
   SWAGGER_ERROR_RESPONSE_EXAMPLE,
   SWAGGER_SUCCESS_RESPONSE_EXAMPLE,
-} from 'src/constant';
+} from 'src/constant/swaager-example';
 
 @ApiTags('auth')
 @Controller('auth')

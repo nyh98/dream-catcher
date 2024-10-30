@@ -66,16 +66,6 @@ describe('일기 테스트', () => {
     expect(result).toBe(undefined);
   });
 
-  it('오늘 작성한 일기가 있으면 예외가 발생한다', async () => {
-    diaryRepository.findTodayDiary = jest
-      .fn()
-      .mockResolvedValue({ id: 1, title: '제목' });
-
-    expect(diaryService.createDiary(user, input)).rejects.toThrow(
-      ConflictException,
-    );
-  });
-
   it('유효하지 않은 형식이면 예외가 발생한다', async () => {
     //given
     const invalidInput = {
@@ -101,7 +91,7 @@ describe('일기 테스트', () => {
     const diary = {
       id: 10,
       title: '제목',
-      contents: [{ seciton: '섹션', detail: '내용' }],
+      contents: { sections: [{ sections: '섹션1', detail: '내용1' }] },
       image: 'http://image.com',
       interpretation: '해몽내용',
       createdAt: '2024-10-28 04:46:59.769356',
@@ -135,7 +125,6 @@ describe('일기 테스트', () => {
       year: 2024,
       month: 10,
     } as SearchDiaryDto;
-    const emptyDto: SearchDiaryDto = { type: 'calendar' } as SearchDiaryDto; //검색 옵션이 없으면 현재 년월로 조회
     const resultDiaries = [
       {
         id: 10,
@@ -182,6 +171,31 @@ describe('일기 테스트', () => {
 
     //then
     expect(result).toEqual([]);
+  });
+
+  it('리스트 형식 일기 조회 성공 케이스', async () => {
+    //given
+    const searchDto: SearchDiaryDto = {
+      type: 'list',
+      limit: 2,
+      page: 1,
+    };
+    const response = {
+      diaries: [{ title: '제목', content: [{}] }],
+      limit: 2,
+      totalPage: 10,
+    };
+
+    diaryRepository.getAllDiaries = jest.fn().mockResolvedValue(response);
+    //when
+    const result = await diaryService.getAllDiaries(
+      user,
+      searchDto.limit,
+      searchDto.page,
+    );
+
+    //then
+    expect(result).toEqual(response);
   });
 
   it('일기 수정 성공 케이스', async () => {

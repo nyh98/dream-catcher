@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { PROVIDER_GROUP } from '../../constant/index';
+import { PROVIDER_GROUP } from '../../constant/swaager-example';
 import {
   IsEmail,
   IsEnum,

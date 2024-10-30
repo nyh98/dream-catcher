@@ -1,15 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsIn,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { templateTpyes, TemplateType } from 'src/types/types';
 
 export class SearchDiaryDto {
-  @ApiProperty({ description: '조회할 타입', example: 'calender 또는 list' })
+  @ApiProperty({ description: '조회할 타입', example: 'calendar 또는 list' })
   @IsNotEmpty({ message: '조회 type을 지정해 주세요' })
   @IsIn(['calendar', 'list'], { message: 'type은 calendar 또는 list 입니다' })
   type: 'calendar' | 'list';
 
   @ApiProperty({
     required: false,
-    description: '조회할 년도, type이 calender일 경우에만 유효',
+    description: '조회할 년도, type이 calendar일 경우에만 유효',
     default: '현재 년도',
   })
   @IsNumber()
@@ -18,7 +25,7 @@ export class SearchDiaryDto {
 
   @ApiProperty({
     required: false,
-    description: '조회할 달 type이 calender일 경우에만 유효',
+    description: '조회할 달 type이 calendar일 경우에만 유효',
     default: '현재 달',
   })
   @IsNumber()
@@ -42,4 +49,21 @@ export class SearchDiaryDto {
   @IsNumber()
   @IsOptional()
   page: number = 1;
+
+  @ApiProperty({
+    required: false,
+    description: '제목 + 내용으로 조회 type이 list일 경우에만 유효',
+  })
+  @IsString()
+  @IsOptional()
+  text?: string;
+}
+
+export class GetSectionDto {
+  @ApiProperty({
+    description: '템플릿별 섹션들 조회',
+    example: "'beginner' | 'expert' | 'free'",
+  })
+  @IsIn(templateTpyes, { message: '유효하지 않은 템플릿 타입 입니다' })
+  template: TemplateType;
 }
