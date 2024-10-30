@@ -65,7 +65,7 @@ export class AuthService {
           catchError((err: AxiosError) => {
             const message = err.message;
             const status = err.status || 400;
-
+            console.log(err.response?.data);
             throw new HttpException(message, status);
           }),
         ),
@@ -84,6 +84,7 @@ export class AuthService {
           catchError((err: AxiosError) => {
             const message = err.message;
             const status = err.status || 400;
+            console.log(err.response?.data);
             throw new HttpException(message, status);
           }),
         ),
