@@ -36,7 +36,7 @@ export class AuthController {
     if (user) {
       return user;
     }
-
+    console.log(userData);
     const newUser = await this.authService.createKakaoUser(userData);
 
     return {
