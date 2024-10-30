@@ -22,6 +22,7 @@ export class AuthService {
   }
 
   async createKakaoUser(userData: DecodedKakaoToken) {
+    console.log('userData : ', userData);
     const { id, properties } = userData;
     const { nickname, profile_image } = properties;
 
