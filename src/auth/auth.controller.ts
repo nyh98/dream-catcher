@@ -25,6 +25,7 @@ export class AuthController {
   @ApiOperation({ summary: '카카오 로그인' })
   @Post('/kakao')
   async kakaoLogin(@Query('code') authCode: string) {
+    console.log('code :', authCode);
     const kakaoRespone = await this.authService.getKakaoToken(authCode);
 
     const { access_token, refresh_token } = kakaoRespone;
