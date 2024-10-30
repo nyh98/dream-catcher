@@ -51,7 +51,10 @@ export class DiaryRepository extends Repository<Diary> {
       tags,
     });
 
-    await this.save(newDiary);
+    const successDiary = await this.save(newDiary);
+    successDiary.contents = this.deserializeContent(successDiary.contents);
+
+    return successDiary;
   }
 
   async updateDiary(diary: Diary, updateDiaryDto: UpdateDiaryDto) {

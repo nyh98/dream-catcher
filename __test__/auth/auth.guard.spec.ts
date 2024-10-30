@@ -26,6 +26,7 @@ describe('인가 가드 테스트', () => {
       provider: 'kakao',
       profileImg: 'http://testurl.com',
       email: 'abc@abc.com',
+      templateType: 'beginner',
       diarys: [],
     };
 

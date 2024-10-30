@@ -45,6 +45,33 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
     },
   },
 
+  createDiary: {
+    status: 201,
+    example: {
+      title: '배고프다..',
+      contents: {
+        sections: null,
+        freeContent: '나는 윤석열이 되었다',
+      },
+      templateType: 'beginner',
+      user: {
+        id: 2,
+        name: '나용환1',
+        email: null,
+        profileImg:
+          'https://cdn.pixabay.com/photo/2024/05/29/16/49/lizard-8796682_640.jpg',
+        provider: 'kakao',
+        uid: '1234',
+        templateType: '',
+      },
+      tags: [],
+      image: null,
+      interpretation: null,
+      id: 43,
+      createdAt: '2024-10-29T20:20:23.659Z',
+    },
+  },
+
   getDiaries: {
     status: 200,
     example: {

@@ -35,6 +35,7 @@ export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   @ApiOperation({ summary: '일기 작성' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.createDiary)
   @Post()
   createDiary(
     @Body(OneFieldRequiredPipe) createDiaryDto: CreateDiaryDto,
