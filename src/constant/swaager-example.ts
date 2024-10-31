@@ -173,7 +173,7 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
     },
   },
 
-  updateUser: {
+  userInfo: {
     status: 200,
     example: {
       id: 2,

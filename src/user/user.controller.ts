@@ -37,13 +37,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: '유저 정보 조회' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.userInfo)
   @Get()
   getMyProfile(@GetUser() user: User) {
     return this.userService.getProfile(user.id);
   }
 
   @ApiOperation({ summary: '프로필 변경' })
-  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.updateUser)
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.userInfo)
   @ApiConsumes('multipart/form-data')
   @ApiBody({ type: UpdateUserDto })
   @UseInterceptors(FileInterceptor('profileImage'))
@@ -63,7 +64,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '템플릿 타입 변경' })
-  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.updateUser)
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.userInfo)
   @Patch('/template')
   updateTemplateType(
     @Body() updateTemplateDto: updateTemplateType,
