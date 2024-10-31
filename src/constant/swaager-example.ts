@@ -172,6 +172,20 @@ export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
       expires_in: 43199,
     },
   },
+
+  updateUser: {
+    status: 200,
+    example: {
+      id: 2,
+      name: '나용환2',
+      email: null,
+      profileImg:
+        'https://s3.ap-northeast-2.amazonaws.com/elasticbeanstalk-ap-northeast-2-905418188515/dream-catcher/imags/1730357265326-egg-4.png',
+      provider: 'kakao',
+      uid: '12345',
+      templateType: 'free',
+    },
+  },
 };
 
 export const SWAGGER_ERROR_RESPONSE_EXAMPLE: {

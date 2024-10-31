@@ -30,7 +30,7 @@ describe('일기 테스트', () => {
     email: 'user@example.com',
     profileImg: 'http://example.com/image.jpg',
     provider: 'kakao',
-    uid: 12345,
+    uid: '12345',
     templateType: 'beginner',
     diarys: [],
   };

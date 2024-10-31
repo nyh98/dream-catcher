@@ -1,9 +1,29 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  FileTypeValidator,
+  Get,
+  ParseFilePipe,
+  Patch,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { GetUser } from 'src/custom/decorators/get-user.decorator';
 import { User } from './entities/user.entity';
+import { updateTemplateType, UpdateUserDto } from './dto/update-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { SWAGGER_SUCCESS_RESPONSE_EXAMPLE } from 'src/constant/swaager-example';
 
 @ApiTags('users')
 @ApiHeader({
@@ -20,5 +40,35 @@ export class UserController {
   @Get()
   getMyProfile(@GetUser() user: User) {
     return this.userService.getProfile(user.id);
+  }
+
+  @ApiOperation({ summary: '프로필 변경' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.updateUser)
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: UpdateUserDto })
+  @UseInterceptors(FileInterceptor('profileImage'))
+  @Patch('/profile')
+  async updateProfile(
+    @Body('name') updateName: string,
+    @UploadedFile(
+      new ParseFilePipe({
+        fileIsRequired: false,
+        validators: [new FileTypeValidator({ fileType: /image/ })],
+      }),
+    )
+    file: Express.Multer.File,
+    @GetUser() user: User,
+  ) {
+    return this.userService.updateProfile(user, file, updateName);
+  }
+
+  @ApiOperation({ summary: '템플릿 타입 변경' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.updateUser)
+  @Patch('/template')
+  updateTemplateType(
+    @Body() updateTemplateDto: updateTemplateType,
+    @GetUser() user: User,
+  ) {
+    return this.userService.updateTemplate(user, updateTemplateDto.type);
   }
 }

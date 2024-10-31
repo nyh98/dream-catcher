@@ -18,7 +18,7 @@ import { User } from 'src/user/entities/user.entity';
 import { GetUser } from 'src/custom/decorators/get-user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { SWAGGER_SUCCESS_RESPONSE_EXAMPLE } from 'src/constant/swaager-example';
-import { GetSectionDto, SearchDiaryDto } from './dto/search-diary.dto';
+import { SearchDiaryDto } from './dto/search-diary.dto';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
 import { OneFieldRequiredPipe } from 'src/custom/pipes/one-field-required-pipe.ts';
 
