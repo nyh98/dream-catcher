@@ -1,6 +1,6 @@
-export type TemplateType = 'beginner' | 'expert' | 'free';
+export type TemplateType = 'Beginner' | 'Expert' | 'Free';
 
-export const templateTpyes: TemplateType[] = ['beginner', 'expert', 'free'];
+export const templateTpyes: TemplateType[] = ['Beginner', 'Expert', 'Free'];
 
 export interface KakaoAuthResponse {
   access_token: string;

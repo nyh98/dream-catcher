@@ -15,7 +15,7 @@ describe('일기 테스트', () => {
   let diaryRepository: DiaryRepository;
   let input: CreateDiaryDto = {
     title: '제목',
-    templateType: 'beginner',
+    templateType: 'Beginner',
     content: {
       sections: [
         { section: '섹션1', detail: 'ㅁㄴㅇ' },

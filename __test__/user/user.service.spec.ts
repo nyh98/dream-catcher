@@ -45,7 +45,7 @@ describe('유저 테스트', () => {
 
   it('정상적인 템플릿 수정', async () => {
     //given
-    const input: TemplateType = 'expert';
+    const input: TemplateType = 'Expert';
     const user: User = {
       id: 1,
       templateType: 'beginner',

@@ -7,6 +7,7 @@ describe('인증 미들웨어 테스트', () => {
   let authMiddleware: AuthMiddleware;
   let mockResponse: Response;
   let mockNext: NextFunction;
+  let authService: AuthService;
 
   const user = { id: 1, name: '나용환' };
 
@@ -16,6 +17,7 @@ describe('인증 미들웨어 테스트', () => {
 
     const authServiceMock = {
       validKakaoToken: jest.fn().mockResolvedValue(user),
+      getKakaoUser: jest.fn().mockResolvedValue(user),
     };
 
     const module: TestingModule = await Test.createTestingModule({
