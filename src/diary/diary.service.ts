@@ -1,16 +1,16 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDiaryDto } from './dto/create-diary.dto';
 import { DiaryRepository } from './diary.repository';
 import { User } from 'src/user/entities/user.entity';
 import { UpdateDiaryDto } from './dto/update-diary.dto';
+import { GptService } from 'src/gpt/gpt.service';
 
 @Injectable()
 export class DiaryService {
-  constructor(private readonly diaryRepository: DiaryRepository) {}
+  constructor(
+    private readonly diaryRepository: DiaryRepository,
+    private readonly gptService: GptService,
+  ) {}
 
   async createDiary(user: User, createDiaryDto: CreateDiaryDto) {
     return this.diaryRepository.insertDiary(user, createDiaryDto);
@@ -43,6 +43,13 @@ export class DiaryService {
     }
 
     return this.diaryRepository.updateDiary(diary, updateDiaryDto);
+  }
+
+  insertDiaryInterpretaion(diaryId: number, content: string) {
+    return this.diaryRepository.update(
+      { id: diaryId },
+      { interpretation: content },
+    );
   }
 
   async deleteDiary(user: User, diaryId: number) {
