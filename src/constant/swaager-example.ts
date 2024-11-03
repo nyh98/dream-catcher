@@ -5,6 +5,17 @@ export const PROVIDER_GROUP = { kakao: 'kakao', google: 'google' };
 export const SWAGGER_SUCCESS_RESPONSE_EXAMPLE: {
   [key: string]: ApiResponseOptions;
 } = {
+  interpretaion: {
+    status: 201,
+    description: 'AI응답이 실시간으로 전송됨',
+    example: `
+    value = 꿈 
+    value = 해몽
+    value = 을
+    value = 해드리겠
+    value = 습니다`,
+  },
+
   signUp: {
     status: 201,
     example: {

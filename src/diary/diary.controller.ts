@@ -12,6 +12,7 @@ import {
   MessageEvent,
   Res,
   BadRequestException,
+  Header,
 } from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { CreateDiaryDto } from './dto/create-diary.dto';
@@ -106,6 +107,7 @@ export class DiaryController {
   }
 
   @ApiOperation({ summary: '꿈 해몽' })
+  @ApiResponse(SWAGGER_SUCCESS_RESPONSE_EXAMPLE.interpretaion)
   @ApiBody({
     type: DecodedDiaryDto,
     description:
@@ -146,11 +148,8 @@ export class DiaryController {
       res.write(message);
     }
 
-    if (decodedDiaryDto.diaryId) {
-      await this.diaryService.insertDiaryInterpretaion(
-        decodedDiaryDto.diaryId,
-        stack.join(''),
-      );
+    if (diaryId) {
+      await this.diaryService.insertDiaryInterpretaion(diaryId, stack.join(''));
     }
     res.end();
   }
