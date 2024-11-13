@@ -1,4 +1,5 @@
 import { Diary } from 'src/diary/entities/diary.entity';
+import { Statistics } from 'src/statistics/entities/statistics.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -24,6 +25,9 @@ export class User {
   @Column()
   templateType: string;
 
-  @OneToMany(() => Diary, (diary) => diary)
+  @OneToMany(() => Diary, (diary) => diary.user)
   diarys: Diary[];
+
+  @OneToMany(() => Statistics, (sta) => sta.user)
+  statistics: Statistics[];
 }

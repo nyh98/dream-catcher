@@ -34,6 +34,9 @@ export class Diary {
   @Column({ name: 'template_type' })
   templateType: string;
 
+  @Column({ name: 'emotion_score' })
+  emotionScore: number;
+
   @ManyToOne(() => User, (user) => user.diarys)
   @JoinColumn({ name: 'user_id' })
   user: User;

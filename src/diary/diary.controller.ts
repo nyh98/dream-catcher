@@ -142,7 +142,6 @@ export class DiaryController {
     const stack: string[] = [];
     for await (const chunk of stream) {
       const message = chunk.choices[0]?.delta?.content || '';
-      console.log(message);
       stack.push(message);
 
       res.write(message);

@@ -22,6 +22,7 @@ describe('일기 테스트', () => {
         { section: '섹션1', detail: '섹션1' },
       ],
     },
+    emotionScore: 20,
   };
 
   let user: User = {
@@ -33,6 +34,7 @@ describe('일기 테스트', () => {
     uid: '12345',
     templateType: 'beginner',
     diarys: [],
+    statistics: [],
   };
 
   beforeEach(async () => {

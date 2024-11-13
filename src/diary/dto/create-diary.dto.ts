@@ -5,6 +5,7 @@ import {
   IsArray,
   IsIn,
   IsNotEmpty,
+  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -64,6 +65,10 @@ export class CreateDiaryDto {
   @ValidateNested({ each: true })
   @Type(() => ContentDto)
   content: ContentDto;
+
+  @ApiProperty()
+  @IsNumber({}, { message: 'emotionScore 는 숫자여야 합니다' })
+  emotionScore: number;
 
   @ApiProperty({ required: false, type: ['string'], example: ['악몽'] })
   @IsOptional()

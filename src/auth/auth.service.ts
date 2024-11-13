@@ -35,6 +35,7 @@ export class AuthService {
       name: nickname,
       profileImg: profile_image,
       provider: 'kakao',
+      templateType: 'Beginner',
     });
 
     return this.userRepository.save(newUser);

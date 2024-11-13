@@ -21,22 +21,13 @@ export class AuthMiddleware implements NestMiddleware {
     const [authScheme, token] = credentials.split(' ');
 
     if (authScheme === 'Bearer' && token) {
-      //임시 로직
-      const userId = Number(token);
-      if (userId) {
-        const user = await this.authService.getUserById(userId);
-        user && (req.user = user);
-        return next();
-      }
-      //토큰 검증
       const tokenData = await this.authService.validKakaoToken(token);
-      console.log('tokenData', tokenData);
       const user = await this.authService.getKakaoUser(tokenData.id.toString());
-      console.log(user);
+
       user && (req.user = user);
       return next();
     }
 
-    next();
+    throw new BadRequestException('token이 없습니다');
   }
 }

@@ -62,7 +62,7 @@ export class SearchDiaryDto {
 export class GetSectionDto {
   @ApiProperty({
     description: '템플릿별 섹션들 조회',
-    example: "'beginner' | 'expert' | 'free'",
+    example: "'Beginner' | 'Expert' | 'Free'",
   })
   @IsIn(templateTpyes, { message: '유효하지 않은 템플릿 타입 입니다' })
   template: TemplateType;
