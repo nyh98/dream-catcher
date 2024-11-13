@@ -12,7 +12,6 @@ import { DecodedDiaryDto } from 'src/diary/dto/decoded-diary.dto';
 export class OneFielDecodedDiaryPipe implements PipeTransform {
   transform(value: DecodedDiaryDto, metadata: ArgumentMetadata) {
     try {
-      console.log(value);
       if (!value.diaryId && !value.content) {
         throw new BadRequestException('diaryId 또는 content 가 없습니다');
       }

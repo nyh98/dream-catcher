@@ -137,7 +137,6 @@ export class DiaryRepository extends Repository<Diary> {
   }
 
   async getAllDiaries(user: User, limit: number, page: number, text?: string) {
-    console.log(text);
     const query = this.createQueryBuilder('diary')
       .leftJoinAndSelect('diary.tags', 'tags')
       .where('diary.user_id = :userId', { userId: user.id })
