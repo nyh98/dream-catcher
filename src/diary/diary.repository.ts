@@ -41,13 +41,14 @@ export class DiaryRepository extends Repository<Diary> {
     let tags: Tag[] = [];
 
     if (createDiaryDto.tags) {
-      tags = await this.getTagsByNames(createDiaryDto.tags);
+      const tagNameArray = createDiaryDto.tags.map((tag) => tag.name);
+      tags = await this.getTagsByNames(tagNameArray);
     }
 
     const newDiary = this.create({
       user,
       ...createDiaryDto,
-      contents: this.serializeContent(createDiaryDto.content),
+      contents: this.serializeContent(createDiaryDto.contents),
       tags,
     });
 
@@ -62,13 +63,14 @@ export class DiaryRepository extends Repository<Diary> {
     let tags: Tag[] = [];
 
     if (updateDiaryDto.tags) {
-      tags = await this.getTagsByNames(updateDiaryDto.tags);
+      const tagNameArray = updateDiaryDto.tags.map((tag) => tag.name);
+      tags = await this.getTagsByNames(tagNameArray);
     } else {
       tags = diary.tags;
     }
 
-    if (updateDiaryDto.content) {
-      contents = this.serializeContent(updateDiaryDto.content);
+    if (updateDiaryDto.contents) {
+      contents = this.serializeContent(updateDiaryDto.contents);
     } else {
       contents = this.serializeContent(diary.contents);
     }
@@ -77,6 +79,7 @@ export class DiaryRepository extends Repository<Diary> {
       ...diary,
       ...updateDiaryDto,
       contents,
+      interpretation: null, //수정 시 기존 해몽 초기화
       tags,
     });
 

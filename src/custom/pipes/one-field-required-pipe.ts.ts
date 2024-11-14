@@ -11,9 +11,9 @@ import { CreateDiaryDto } from 'src/diary/dto/create-diary.dto';
 export class OneFieldRequiredPipe implements PipeTransform {
   transform(value: CreateDiaryDto, metadata: ArgumentMetadata) {
     try {
-      const { content } = value;
+      const { contents } = value;
 
-      if (!content.freeContent && !content.sections) {
+      if (!contents.freeContent && !contents.sections) {
         throw new BadRequestException(
           'content.sections 또는 content.freeContent 가 없습니다',
         );

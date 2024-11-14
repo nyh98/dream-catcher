@@ -4,6 +4,7 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsIn,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsObject,
@@ -16,12 +17,10 @@ import { templateTpyes, TemplateType } from 'src/types/types';
 class Section {
   @ApiProperty()
   @IsString({ message: 'section은 문자열 이여야 합니다' })
-  @IsNotEmpty({ message: 'section은 비어있을수 없습니다' })
   section: string;
 
   @ApiProperty()
   @IsString({ message: 'detail은 문자열 이여야 합니다' })
-  @IsNotEmpty({ message: 'detail은 비어있을수 없습니다' })
   detail: string;
 }
 
@@ -43,10 +42,19 @@ export class ContentDto {
     example: 'string | null',
     type: String,
   })
-  @IsNotEmpty()
   @IsString()
   @IsOptional()
   freeContent?: string | null = null;
+}
+
+export class TagDto {
+  @ApiProperty()
+  @IsInt()
+  id: number;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
 }
 
 export class CreateDiaryDto {
@@ -64,16 +72,21 @@ export class CreateDiaryDto {
   @IsObject()
   @ValidateNested({ each: true })
   @Type(() => ContentDto)
-  content: ContentDto;
+  contents: ContentDto;
 
   @ApiProperty()
+  @IsOptional()
   @IsNumber({}, { message: 'emotionScore 는 숫자여야 합니다' })
   emotionScore: number;
 
-  @ApiProperty({ required: false, type: ['string'], example: ['악몽'] })
+  @ApiProperty({
+    required: false,
+    type: [TagDto],
+    example: [{ id: 1, name: '악몽' }],
+  })
   @IsOptional()
   @IsArray({ message: 'tag는 리스트 형식이여야 합니다' })
-  @ArrayNotEmpty({ message: 'tag 리스트가 비어있습니다' })
-  @IsString({ each: true, message: 'tag는 문자열 이여야 합니다' })
-  tags?: string[];
+  @ValidateNested({ each: true, message: '유효하지 않은 tag 형식' })
+  @Type(() => TagDto)
+  tags?: TagDto[];
 }

@@ -26,7 +26,7 @@ export class Diary {
   image: string;
 
   @Column({ nullable: true, type: 'text' })
-  interpretation: string;
+  interpretation: string | null;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

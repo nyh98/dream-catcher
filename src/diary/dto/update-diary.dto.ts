@@ -5,5 +5,5 @@ import { IsNumber } from 'class-validator';
 export class UpdateDiaryDto extends PartialType(CreateDiaryDto) {
   @ApiProperty({ example: 6 })
   @IsNumber()
-  diaryId: number;
+  id: number;
 }

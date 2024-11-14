@@ -33,10 +33,7 @@ export class DiaryService {
   }
 
   async updateDiary(user: User, updateDiaryDto: UpdateDiaryDto) {
-    const diary = await this.diaryRepository.getDiary(
-      user,
-      updateDiaryDto.diaryId,
-    );
+    const diary = await this.diaryRepository.getDiary(user, updateDiaryDto.id);
 
     if (!diary) {
       throw new NotFoundException('존재하지 않는 diaryId 입니다');
